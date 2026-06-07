@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Полезные статьи — Салон красоты "Wonder"</title>
+    <link rel="icon" href="logo.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #fcb5d3;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+         .navbar-top {
+            background: #2c2f33;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            font-size: 14px;
+        }
+
+        .logo-text {
+            font-family: 'Marck Script', cursive;
+            font-size: 32px;
+            color: #ffb6c1;
+            text-decoration: none;
+        }
+
+        nav {
+            background: #23272a;
+            padding: 15px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 13px;
+            text-transform: uppercase;
+            font-family: 'Montserrat', sans-serif;
+            transition: 0.3s;
+            display: inline-block;
+        }
+
+        nav a:hover {
+            transform: scale(1.1);
+            color: #ffb6c1;
+        }
+nav a.active {
+            color: #ffb6c1 !important;      /* Розовый цвет текста */
+            font-weight: bold;               /* Жирный шрифт */
+            border-bottom: 2px solid #b0184a; /* Элегантное бордовое подчеркивание */
+            padding-bottom: 5px;
+        }
+        .hero {
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.3);
+            text-align: center;
+        }
+
+        .articles-wrapper {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .article-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .article-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            text-align: left;
+        }
+
+        .article-category {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #b0184a;
+            font-weight: bold;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .article-title {
+            margin: 0 0 10px 0;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+            color: #2c2f33;
+        }
+
+        .article-text {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+
+        .read-more {
+            color: #b0184a;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .read-more:hover {
+            text-decoration: underline;
+        }
+
+        /* МОДАЛЬНЫЕ ОКНА */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s;
+            z-index: 9999; /* Чтобы окно 100% было поверх всего */
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-window {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            text-align: left;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px; right: 15px;
+            font-size: 22px;
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        .modal-window input, .modal-window select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .btn-submit {
+            background: #b0184a;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        footer {
+            background: #2c2f33;
+            color: white;
+            padding: 40px 20px;
+            width: 100%;
+            margin-top: 50px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-top { flex-direction: column !important; gap: 10px !important; padding: 15px !important; text-align: center !important; }
+            nav { padding: 10px !important; }
+            nav a { margin: 5px 10px !important; font-size: 12px !important; }
+            .articles-wrapper { grid-template-columns: 1fr !important; padding: 0 15px !important; }
+        }
+
+        /* --- ГЛАМУРНЫЕ БЛЕСТКИ --- */
+        .sparkle {
+            position: fixed;
+            font-family: serif;
+            line-height: 1;
+            pointer-events: none;
+            z-index: 0;
+            animation: glamFloat linear infinite;
+            opacity: 0;
+            text-shadow: 0 0 5px #ffffff, 0 0 10px #ffb6c1, 0 0 20px #fff;
+        }
+
+        @keyframes glamFloat {
+            0% { opacity: 0; transform: translateY(20px) rotate(0deg) scale(0.6); }
+            15% { opacity: 0.9; }
+            85% { opacity: 0.9; }
+            100% { opacity: 0; transform: translateY(-80px) rotate(180deg) scale(1.3); }
+        }
+
+        /* Правильный Z-index (ВНИМАНИЕ: .modal-overlay убран отсюда, чтобы не падал вниз!) */
+        .navbar-top, nav, header, .articles-wrapper, footer {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* СТИЛИ ДЛЯ ПАНЕЛИ АДМИНИСТРАТОРА */
+        .admin-panel {
+            display: none;
+            background: #23272a;
+            color: white;
+            padding: 20px;
+            border-bottom: 4px solid #b0184a;
+        }
+        .admin-panel table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; color: #333; }
+        .admin-panel th, .admin-panel td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        .admin-panel th { background: #eee; }
+        
+        .edit-btn {
+            display: none;
+            background: #b0184a;
+            color: white;
+            border: none;
+            padding: 3px 8px;
+            font-size: 11px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="adminPanel" class="admin-panel">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>⚙️ Панель управления салоном (Роль: Администратор)</h2>
+            <button onclick="logoutAdmin()" style="background:#b0184a; color:white; border:none; padding:8px 15px; cursor:pointer; border-radius:4px;">Выйти из режима админа</button>
+        </div>
+        <h3>Список онлайн-записей клиентов:</h3>
+        <table id="bookingsTable">
+            <thead>
+                <tr>
+                    <th>Имя клиента</th>
+                    <th>Мастер</th>
+                    <th>Услуга</th>
+                    <th>Дата</th>
+                    <th>Время</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <button onclick="clearBookings()" style="margin-top:10px; background:#333; color:white; border:none; padding:5px 10px; cursor:pointer;">Очистить список записей</button>
+    </div>
+
+    <div class="navbar-top">
+        <a href="index.html" class="logo-text">Wonder</a>
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <div style="display: flex; gap: 15px; font-family: 'Montserrat', sans-serif; font-size: 13.5px; color: #e0e0e0; flex-wrap: wrap;">
+                <span style="display: flex; align-items: center; gap: 6px;">
+                    <svg style="width: 16px; height: 16px; color: #ffb6c1; flex-shrink: 0;" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                    г. Нижний Ломов, ул. Колбасенко, 1
+                </span>
+                <span style="display: flex; align-items: center; gap: 6px;">
+                    <svg style="width: 16px; height: 16px; color: #ffb6c1; flex-shrink: 0;" viewBox="0 0 24 24"><path fill="currentColor" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                    +7 (999) 000-00-00
+                </span>
+            </div>
+            <button onclick="openModal()" style="background: #b0184a; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; flex-shrink: 0;">
+                Записаться
+            </button>
+        </div>
+    </div>
+
+    <nav>
+        <a href="index.html">Главная</a>
+        <a href="masters.html">Мастера</a>
+        <a href="services.html">Прайс-лист</a>
+        <a href="articles.html">Полезные статьи</a>
+        <a href="reviews.html">Отзывы</a>
+         <a href="contacts.html">Контакты</a>
+    </nav>
+
+    <header class="hero">
+        <h1 style="font-family: 'Montserrat', sans-serif; margin: 0; font-size: 28px;">Блог об уходе за волосами</h1>
+        <p style="color: #555; margin-top: 10px;">Секреты красоты, здоровья и идеального стиля от мастеров «Wonder»</p>
+    </header>
+
+    <main class="articles-wrapper">
+
+        <article class="article-card">
+            <div class="article-content">
+                <span class="article-category">Домашний уход</span>
+                <h3 class="article-title">
+                    <span id="art1Title">Как правильно мыть голову: 5 ошибок, которые портят ваши волосы</span>
+                    <button class="edit-btn" onclick="editContent('art1Title')">[Редактировать]</button>
+                </h3>
+                <p class="article-text">
+                    <span id="art1Desc">Большинство людей совершают стандартные ошибки: используют слишком горячую воду, наносят бальзам на корни или трут влажные волосы полотенцем. Рассказываем, как превратить обычное мытье в салонный ритуал.</span>
+                    <button class="edit-btn" onclick="editContent('art1Desc')">[Редактировать]</button>
+                </p>
+                <a href="javascript:void(0)" class="read-more" onclick="openArticle('Как правильно мыть голову', '<p>Мы моем голову на автомате, тратя на это 10–15 минут. Но именно в эти минуты часто решается судьба укладки и здоровья прядей. Большинство из нас совершает одни и те же ошибки, даже не подозревая, почему волосы пушатся, быстро жирнеют или секутся.</p><p>Разбираем 5 главных промахов и рассказываем, как превратить рутинное мытье в настоящий салонный ритуал.</p><h3>Ошибка №1: Слишком горячая вода</h3><p>Многие любят погорячее, но для кожи головы это стресс. Высокая температура раскрывает кутикулу волоса, делая его пористым и ломким, а сальные железы заставляет работать активнее. Результат: тусклость и эффект «грязной головы» уже к вечеру. <b>Совет:</b> используйте теплую, комфортную воду, а в конце ополосните пряди прохладной.</p><h3>Ошибка №2: Нанесение шампуня сразу на волосы</h3><p>Пряди страдают от концентрированного состава, пока вы пытаетесь распределить пену. Это сушит длину, но плохо очищает корни. <b>Совет:</b> сначала вспеньте шампунь в ладонях с небольшим количеством воды. Наносите пену только на корни и кожу головы.</p><h3>Ошибка №3: Мытье «по верхам» и пренебрежение массажем</h3><p>Просто растереть пену и смыть — недостаточно. Без качественного очищения поры забиваются, а волосяные луковицы недополучают кислород. <b>Совет:</b> уделите массажу подушечками пальцев 2–3 минуты.</p><h3>Ошибка №4: Кондиционер или бальзам на корнях</h3><p>Это главный «убийца» прикорневого объема. Питательные компоненты бальзама утяжеляют волосы у основания. <b>Совет:</b> отступайте минимум 5–10 см от корней. Наносите бальзамы только на длину и кончики.</p><h3>Ошибка №5: Растирание мокрых волос полотенцем</h3><p>Мокрый волос очень хрупкий и эластичный. <b>Совет:</b> аккуратно отожмите воду руками и промокните волосы мягким полотенцем по направлению от корней к кончикам. Не трите!</p><h3>Бонус: салонный ритуал</h3><p>Попробуйте сделать процесс осознанным. Медленный массаж кожи головы снимает напряжение не только с волос, но и с нервной системы. А если вы чувствуете, что домашнего ухода недостаточно — приходите к нам! Мы подберем профессиональный уход и вернем вашим прядям здоровье.</p>')">Читать статью →</a>
+            </div>
+        </article>
+
+        <article class="article-card">
+            <div class="article-content">
+                <span class="article-category">Окрашивание</span>
+                <h3 class="article-title">
+                    <span id="art2Title">Секреты ухода за блондом: сохраняем цвет и блеск</span>
+                    <button class="edit-btn" onclick="editContent('art2Title')">[Редактировать]</button>
+                </h3>
+                <p class="article-text">
+                    <span id="art2Desc">Осветленные волосы требуют особого внимания. Как избежать появления желтизны, какие салонные процедуры необходимы блондинкам и чем заменить обычный шампунь в домашних условиях.</span>
+                    <button class="edit-btn" onclick="editContent('art2Desc')">[Редактировать]</button>
+                </p>
+                <a href="javascript:void(0)" class="read-more" onclick="openArticle('Секреты ухода за блондом', '<h3>Быть блондинкой — это искусство</h3><p>Роскошный холодный оттенок или сияющий теплый медовый блонд требует дисциплины. После осветления структура волоса меняется: он становится пористым, а пигмент вымывается быстрее.</p><h3>Главный враг — желтизна</h3><p>Желтый пигмент проявляется, когда тонировка смывается. На это влияют жесткая вода и ультрафиолет. <b>Что делать:</b> используйте шампуни с фиолетовым пигментом 1–2 раза в неделю для нейтрализации желтых нот. Будьте осторожны с натуральными маслами — они могут придать рыжий подтон.</p><h3>Домашний уход без агрессии</h3><p>Обычные шампуни сушат осветленные волосы. Ищите бессульфатные линейки для окрашенных волос. Они мягче очищают и увлажняют пористую структуру, не давая пигменту вымываться.</p><h3>Салонный минимум для блеска</h3><p>Чтобы блонд выглядел дорого, включите в рутину:</p><ul><li><b>Кератиновое восстановление или ботокс:</b> возвращают эластичность.</li><li><b>Ламинирование:</b> запечатывает цвет внутри и дает стеклянный блеск.</li><li><b>Регулярное тонирование:</b> обновление оттенка по всей длине.</li></ul><h3>Ежедневные правила</h3><p><b>Термозащита — ваш закон.</b> Без спрея плойка или фен превратят блонд в солому. Также старайтесь не мыть голову каждый день и, по возможности, установите фильтр на душ — это лучшее вложение для сохранения чистоты цвета.</p><hr><p>Хотите подобрать идеальную домашнюю рутину? Приходите в наш салон — мы проведем диагностику, подберем пигмент и вернем вашим волосам настоящий холодный блеск!</p>')">Читать статью →</a>
+            </div>
+        </article>
+
+        <article class="article-card">
+            <div class="article-content">
+                <span class="article-category">Тренды</span>
+                <h3 class="article-title">
+                    <span id="art3Title">Топ-5 стрижек этой весны: что выбрать для смены имиджа</span>
+                    <button class="edit-btn" onclick="editContent('art3Title')">[Редактировать]</button>
+                </h3>
+                <p class="article-text">
+                    <span id="art3Desc">В этом сезоне в моду возвращается легкая небрежность, градуированные текстуры и челки-шторки. Разбираем, какая форма стрижки идеально подойдет под ваш тип лица и структуру волос.</span>
+                    <button class="edit-btn" onclick="editContent('art3Desc')">[Редактировать]</button>
+                </p>
+                <a href="javascript:void(0)" class="read-more" onclick="openArticle('Топ-5 стрижек этой весны', '<h3>Весна — время обновления</h3><p>Тяжелые многослойные укладки уступают место воздушным текстурам, а на смену строгой геометрии приходит мягкая, живая небрежность. Разбираем пять главных стрижек сезона.</p><h3>1. Боб с микро-градуировкой</h3><p>Классика, которая становится мягче. В моде легкая внутренняя градуировка, придающая кончикам подвижность. <b>Кому подходит:</b> прямым и слегка волнистым волосам.</p><h3>2. Шегги: многослойность и характер</h3><p>Главный тренд на дерзкую текстуру. Это намеренно рваные пряди и максимальный объем. <b>Кому подходит:</b> обладательницам тонких волос, которым не хватает густоты.</p><h3>3. Челка-шторка</h3><p>Распадающаяся на две стороны удлиненная челка мягко обрамляет лицо. <b>Кому подходит:</b> идеальное решение для высокого лба, смягчает угловатые черты.</p><h3>4. Удлиненное каре с ровным срезом</h3><p>Элегантность возвращается. Волосы выглядят плотными, здоровыми и дорогими. <b>Кому подходит:</b> прямым густым волосам.</p><h3>5. Пикси с асимметрией</h3><p>Укороченные виски и удлиненная макушка добавляют легкости и визуально делают образ более утонченным. <b>Кому подходит:</b> обладательницам выразительных черт лица.</p><hr><h3>Как выбрать свою идеальную стрижку?</h3><p>Овал лица — лишь часть уравнения. На самом деле решает текстура волос и то, сколько времени вы готовы тратить на укладку. Приходите на консультацию в наш салон — стилист оценит структуру ваших волос, обсудит образ жизни и предложит вариант, который будет идеально смотреться именно на вас!</p>')">Читать статью →</a>
+            </div>
+        </article>
+
+        <article class="article-card">
+            <div class="article-content">
+                <span class="article-category">Здоровье волос</span>
+                <h3 class="article-title">
+                    <span id="art4Title">Защита от солнца и термоукладки: зачем нужен термозащитный спрей</span>
+                    <button class="edit-btn" onclick="editContent('art4Title')">[Редактировать]</button>
+                </h3>
+                <p class="article-text">
+                    <span id="art4Desc">Высокие температуры фена или утюжка буквально испаряют влагу изнутри волоса. Разбираемся в механизме работы термозащитных средств и учимся правильно их выбирать и наносить.</span>
+                    <button class="edit-btn" onclick="editContent('art4Desc')">[Редактировать]</button>
+                </p>
+                <a href="javascript:void(0)" class="read-more" onclick="openArticle('Здоровье волос: зачем нужен термозащитный спрей', '<h3>Почему фен — это испытание</h3><p>Мы ежедневно подвергаем волосы испытаниям. Фен, утюжок или плойка разогреваются до 230 °C, из-за чего вода внутри волоса закипает и разрывает структуру. Результат — ломкость и тусклость. Единственный способ сохранить красоту — использовать термозащиту.</p><h3>Как это работает?</h3><p>Термозащитные средства работают по двум направлениям: <b>равномерное распределение тепла</b> (защита от локальных перегревов) и <b>удержание влаги</b> (сохранение естественного увлажнения внутри волоса).</p><h3>Что выбрать по текстуре?</h3><ul><li><b>Спрей или флюид:</b> для тонких волос, склонных к жирности.</li><li><b>Крем или лосьон:</b> для густых, пористых, вьющихся и осветленных волос.</li><li><b>Масло-спрей:</b> финишный аккорд для блеска (наносить только на длину и кончики).</li></ul><h3>Золотые правила</h3><p>Не наносите средство перед самым феном — дайте ему впитаться 1–2 минуты. Ищите на упаковке маркировку <b>Thermal Protection</b> или <b>Heat Protect</b>. Убедитесь, что уровень защиты соответствует вашему инструменту: до 200 °C — для фена, до 230 °C — для утюжков.</p><hr><p>Не уверены, какая текстура подходит вашему типу волос? Приходите в наш салон на консультацию — стилист оценит структуру ваших прядей и поможет подобрать идеальные профессиональные средства, которые защитят вашу красоту при любых температурах!</p>')">Читать статью →</a>
+            </div>
+        </article>
+
+        <article class="article-card">
+            <div class="article-content">
+                <span class="article-category">Здоровье волос</span>
+                <h3 class="article-title">
+                    <span id="art5Title">Выпадение волос: когда норма, а когда пора бить тревогу</span>
+                    <button class="edit-btn" onclick="editContent('art5Title')">[Редактировать]</button>
+                </h3>
+                <p class="article-text">
+                    <span id="art5Desc">Разбираемся, какая потеря волос естественна, а в каком случае пора принимать меры и что может предложить салон.</span>
+                    <button class="edit-btn" onclick="editContent('art5Desc')">[Редактировать]</button>
+                </p>
+                <a href="javascript:void(0)" class="read-more" onclick="openArticle('Выпадение волос: когда норма, а когда бить тревогу', '<h3>Сколько терять — это норма?</h3><p>Цифра, которую стоит запомнить: <b>от 50 до 100 волос в день</b>. Если вы видите тонкие волоски с белым корешком-луковицей — это плановая смена поколений.</p><h3>Когда пора к специалисту?</h3><ul><li>Выпадение длится больше двух месяцев, и объем волос заметно уменьшился.</li><li>Волосы выпадают участками (проплешины или расширение пробора).</li><li>На месте сильных волос растет тонкий и слабый пушок.</li><li>Выпадение сопровождается зудом или перхотью.</li></ul><h3>Что чаще всего провоцирует проблему?</h3><p>Основные триггеры: дефицит железа и витаминов (D, группы B), хронический стресс, а также неправильный уход (забитые поры, стайлинг у корней).</p><h3>Что предлагает салон?</h3><p>Косметические маски бессильны, если проблема внутри. В нашем салоне мы предлагаем:</p><ul><li><b>Трихоскопия:</b> аппаратная диагностика состояния фолликулов.</li><li><b>Мезотерапия и плазмотерапия:</b> инъекционные методики для укрепления корней.</li><li><b>Профессиональные пилинги:</b> глубокое очищение кожи головы для нормализации работы сальных желез.</li></ul><hr><p>Здоровье волос начинается со здоровья кожи головы. Не занимайтесь самолечением! Запишитесь к нам на диагностику, и мы разработаем персональный план восстановления, чтобы вернуть вашим волосам силу и густоту.</p>')">Читать статью →</a>
+            </div>
+        </article>
+
+        <article class="article-card">
+            <div class="article-content">
+                <span class="article-category">Сезонный уход</span>
+                <h3 class="article-title">
+                    <span id="art6Title">Волосы летом: защита от солнца и моря</span>
+                    <button class="edit-btn" onclick="editContent('art6Title')">[Редактировать]</button>
+                </h3>
+                <p class="article-text">
+                    <span id="art6Desc">Ультрафиолет, морская соль и хлорка в бассейне — как защитить пряди и вернуть им жизнь после отпуска.</span>
+                    <button class="edit-btn" onclick="editContent('art6Desc')">[Редактировать]</button>
+                </p>
+                <a href="javascript:void(0)" class="read-more" onclick="openArticle('Волосы летом: защита от солнца, моря и хлорки', '<h3>Лето — испытание для волос</h3><p>Ультрафиолет разрушает кератин, соленая вода вытягивает влагу, а хлорка в бассейне способна изменить оттенок волос. Разбираемся, как защитить пряди и вернуть их к жизни.</p><h3>Солнце: невидимый враг</h3><p>УФ-лучи окисляют пигмент и разрушают структуру волоса. <b>Правила защиты:</b> обязательно носите головной убор и используйте специальные спреи с UV-фильтрами. Не сушите волосы на прямом солнце.</p><h3>Морская вода</h3><p>Соль буквально вытягивает влагу. <b>Что делать:</b> перед купанием ополосните голову пресной водой, чтобы волос меньше впитал соль, а после пляжа — обязательно промойте проточной водой.</p><h3>Бассейн: скрытая угроза</h3><p>Хлорированная вода сушит волосы, а блондинкам грозит зеленым подтоном. <b>План действий:</b> намочите голову чистой водой до заплыва и используйте шампунь глубокой очистки сразу после бассейна.</p><h3>SOS-восстановление после отпуска</h3><p>Даже при защите волосы нужно «оживить» дома:</p><ul><li>Увлажняющие маски с алоэ или гиалуроновой кислотой.</li><li>Временный отказ от горячих укладок.</li><li>Стрижка кончиков (даже 1-2 см) для обновления формы.</li></ul><hr><h3>Когда нужен салон?</h3><p>Если домашнего ухода недостаточно, подключаются профессиональные процедуры: кератиновое восстановление или элюминирование запечатают влагу внутри, а холодное тонирование исправит нежелательные оттенки. Приходите в наш салон на диагностику — мы подберем процедуру под ваш тип волос, чтобы вернуть им силу и блеск после солнечного сезона!</p>')">Читать статью →</a>
+            </div>
+        </article>
+
+    </main>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-window">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h3 style="font-family: 'Montserrat', sans-serif; margin-top: 0;">Онлайн-запись</h3>
+            <form id="bookingForm">
+                <input type="text" placeholder="Ваше имя" required>
+                <input type="tel" placeholder="Номер телефона" required>
+                <select required>
+                    <option value="" disabled selected>Выберите услугу</option>
+                    <option value="1">Женская стрижка</option>
+                    <option value="2">Мужская стрижка</option>
+                    <option value="3">Сложное окрашивание</option>
+                    <option value="4">Уходовая процедура</option>
+                </select>
+                <button type="submit" class="btn-submit">Подтвердить запись</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="articleModal">
+        <div class="modal-window" style="max-width: 600px; text-align: left;">
+            <span class="close-btn" onclick="closeArticle()">&times;</span>
+            <h2 id="modalTitle" style="font-family: 'Montserrat'; color: #b0184a; margin-top: 0;">Заголовок</h2>
+            <div id="modalBody" style="line-height: 1.6; color: #333;">Текст статьи...</div>
+        </div>
+    </div>
+
+    <footer>
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <p>© 2026 Салон красоты "Wonder". Все права защищены.</p>
+            <p>г. Нижний Ломов, ул. Колбасенко, д. 1 | Тел: +7 (999) 000-00-00</p>
+            <p style="margin-top: 15px;">
+                <a href="#" onclick="loginAdmin(event)" style="color: #ffb6c1; font-size: 11px; text-decoration: underline;">
+                    Вход для персонала (Администратор)
+                </a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // --- ГЕНЕРАЦИЯ ОБНОВЛЕННЫХ ГЛАМУРНЫХ ЗВЕЗД-БЛЕСТОК ---
+        function createSparkle() {
+            const sparkle = document.createElement('div');
+            sparkle.classList.add('sparkle');
+            const starTypes = ['✦', '✧', '✦'];
+            sparkle.innerText = starTypes[Math.floor(Math.random() * starTypes.length)];
+            const size = Math.random() * 12 + 12;
+            sparkle.style.fontSize = `${size}px`;
+            const colors = ['#ffffff', '#fff3cd', '#ffe4e1', '#ffffff'];
+            sparkle.style.color = colors[Math.floor(Math.random() * colors.length)];
+            sparkle.style.left = `${Math.random() * 100}vw`;
+            sparkle.style.top = `${Math.random() * 100}vh`;
+            const duration = Math.random() * 3 + 3;
+            sparkle.style.animationDuration = `${duration}s`;
+            document.body.appendChild(sparkle);
+            setTimeout(() => { sparkle.remove(); }, duration * 1000);
+        }
+        setInterval(createSparkle, 400);
+
+        // ЛОГИКА МОДАЛЬНОГО ОКНА ЗАПИСИ
+        function openModal() {
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Спасибо за заявку! Мы свяжемся с вами в ближайшее время.');
+            closeModal();
+        });
+
+        // ЛОГИКА МОДАЛЬНОГО ОКНА СТАТЕЙ
+        function openArticle(title, content) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalBody').innerHTML = content;
+            document.getElementById('articleModal').classList.add('active');
+        }
+        function closeArticle() {
+            document.getElementById('articleModal').classList.remove('active');
+        }
+        document.getElementById('articleModal').addEventListener('click', function(e) {
+            if (e.target === this) closeArticle();
+        });
+
+        /* --- ЛОГИКА ДЛЯ РОЛИ АДМИНИСТРАТОРА --- */
+        function loginAdmin(event) {
+            event.preventDefault();
+            var password = prompt("Введите пароль для входа в панель администратора:");
+            if (password === "1234") {
+                localStorage.setItem('isAdmin', 'true');
+                showAdminInterface();
+            } else if (password !== null) {
+                alert("Неверный пароль! Доступ закрыт.");
+            }
+        }
+
+        function logoutAdmin() {
+            localStorage.removeItem('isAdmin');
+            location.reload(); 
+        }
+
+        function showAdminInterface() {
+            document.getElementById("adminPanel").style.display = "block";
+            var editButtons = document.querySelectorAll('.edit-btn');
+            editButtons.forEach(function(btn) {
+                btn.style.display = "inline-block";
+            });
+            updateAdminTable();
+        }
+
+        function updateAdminTable() {
+            var tbody = document.querySelector("#bookingsTable tbody");
+            if(!tbody) return;
+            tbody.innerHTML = ""; 
+            var bookings = JSON.parse(localStorage.getItem('salonBookings')) || [];
+            if (bookings.length === 0) {
+                tbody.innerHTML = "<tr><td colspan='5' style='text-align:center; color: gray;'>Новых записей пока нет</td></tr>";
+                return;
+            }
+            bookings.forEach(function(item) {
+                var row = document.createElement("tr");
+                row.innerHTML = "<td>" + item.name + "</td>" +
+                                "<td>" + item.master + "</td>" +
+                                "<td>" + item.service + "</td>" +
+                                "<td>" + item.date + "</td>" +
+                                "<td>" + item.time + "</td>";
+                tbody.appendChild(row);
+            });
+        }
+
+        function clearBookings() {
+            if (confirm("Вы уверены, что хотите удалить все записи клиентов?")) {
+                localStorage.removeItem('salonBookings');
+                updateAdminTable();
+            }
+        }
+
+        function editContent(elementId) {
+            var element = document.getElementById(elementId);
+            var currentText = element.innerText;
+            var newText = prompt("Редактирование блока. Введите новый текст:", currentText);
+            if (newText !== null && newText.trim() !== "") {
+                element.innerText = newText;
+                localStorage.setItem(elementId, newText);
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('isAdmin') === 'true') {
+                showAdminInterface();
+            }
+            
+            const editableElements = [
+                'art1Title', 'art1Desc', 
+                'art2Title', 'art2Desc', 
+                'art3Title', 'art3Desc', 
+                'art4Title', 'art4Desc', 
+                'art5Title', 'art5Desc', 
+                'art6Title', 'art6Desc'
+            ]; 
+            
+            editableElements.forEach(function(id) {
+                if (localStorage.getItem(id)) {
+                    const el = document.getElementById(id);
+                    if (el) el.innerText = localStorage.getItem(id);
+                }
+            });
+        });
+
+        // Автоматическое выделение активного пункта меню
+window.addEventListener('DOMContentLoaded', function() {
+    // Получаем имя текущего файла из адреса (например, "masters.html")
+    const currentFile = window.location.pathname.split("/").pop();
+    
+    // Находим все ссылки внутри навигации
+    const navLinks = document.querySelectorAll('nav a');
+    
+    navLinks.forEach(function(link) {
+        // Получаем значение атрибута href у ссылки
+        const linkHref = link.getAttribute('href');
+        
+        // Если имя файла совпадает с href ссылки, добавляем класс active
+        if (currentFile === linkHref) {
+            link.classList.add('active');
+        }
+        
+        // На случай, если сайт открыт просто по корневому адресу (главная)
+        if (currentFile === "" && linkHref === "index.html") {
+            link.classList.add('active');
+        }
+    });
+});
+    </script>
+</body>
+</html>

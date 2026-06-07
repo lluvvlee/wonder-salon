@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Салон красоты "Wonder" | Мастера</title>
+  <link rel="icon" href="logo.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #fcb5d3;
+      font-family: 'Montserrat', 'Segoe UI', sans-serif;
+      color: #2c2f33;
+      line-height: 1.5;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    input {
+      display: block;
+      margin: 10px auto;
+      padding: 10px;
+      width: 250px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    header {
+      background: #2c2f33;
+      color: white;
+      font-family: 'Montserrat', sans-serif;
+      position: relative;
+      z-index: 10;
+    }
+
+    .navbar-top {
+      background: #2c2f33;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 30px;
+      font-size: 14px;
+      flex-wrap: wrap;
+    }
+
+    .logo-text {
+      font-family: 'Marck Script', cursive;
+      font-size: 32px;
+      color: #ffb6c1;
+      text-decoration: none;
+    }
+
+    nav {
+      background: #23272a;
+      padding: 15px;
+      text-align: center;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      font-size: 13px;
+      text-transform: uppercase;
+      font-family: 'Montserrat', sans-serif;
+      transition: 0.3s;
+      display: inline-block;
+    }
+
+    nav a:hover {
+      transform: scale(1.1);
+      color: #ffb6c1;
+    }
+    nav a.active {
+      color: #ffb6c1 !important;
+      font-weight: bold;
+      border-bottom: 2px solid #b0184a;
+      padding-bottom: 5px;
+    }
+
+    footer {
+      background: #2c2f33;
+      color: white;
+      padding: 40px 20px;
+      width: 100%;
+      margin-top: 50px;
+      text-align: center;
+      box-sizing: border-box;
+      position: relative;
+      z-index: 5;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    #scrollToTopBtn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 1000;
+      width: 50px;
+      height: 50px;
+      min-width: 50px;
+      background-color: #b0184a;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      opacity: 0;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 4px;
+      box-sizing: border-box;
+    }
+
+    #scrollToTopBtn.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #scrollToTopBtn:hover {
+      background-color: #333;
+      transform: scale(1.1);
+    }
+
+    .admin-panel {
+      display: none;
+      background: #23272a;
+      color: white;
+      padding: 20px;
+      border-bottom: 4px solid #b0184a;
+      text-align: left;
+    }
+
+    .edit-btn, .fire-btn {
+      display: none; 
+    }
+    body.admin-mode .edit-btn {
+      display: inline-block;
+    }
+    body.admin-mode .fire-btn {
+      display: inline-block;
+    }
+
+    .edit-btn {
+      background: #b0184a;
+      color: white;
+      border: none;
+      padding: 4px 10px;
+      font-size: 11px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+
+    .fire-btn {
+      background: #b0184a;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+
+    #addMasterBlock input, #addMasterBlock textarea {
+      display: block;
+      width: 100% !important;
+      margin: 5px 0 12px 0 !important;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .masters-grid {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 20px 30px;
+      display: grid;
+      gap: 30px;
+      position: relative;
+      z-index: 5;
+    }
+
+    @media (min-width: 1001px) {
+      .masters-grid {
+        grid-template-columns: repeat(6, 1fr); 
+      }
+      .master-card {
+        grid-column: span 2; 
+      }
+      .master-card:nth-child(4) {
+        grid-column: 2 / span 2;
+      }
+      .master-card:nth-child(5) {
+        grid-column: 4 / span 2;
+      }
+    }
+
+    .master-card {
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: transform 0.25s ease, box-shadow 0.3s, opacity 0.3s;
+      height: fit-content;
+    }
+
+    .master-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 18px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .master-card.is-fired {
+      display: none;
+    }
+    body.admin-mode .master-card.is-fired {
+      display: flex;
+      opacity: 0.55;
+      filter: grayscale(70%);
+      border: 3px dashed #b0184a;
+      background: #fff0f3;
+    }
+
+    .master-photo {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #ffb6c1;
+      margin-bottom: 20px;
+      background: #fce4ec;
+    }
+
+    .master-name {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #2c2f33;
+      margin-bottom: 4px;
+    }
+
+    .master-job {
+      font-style: italic;
+      color: #666;
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+
+    .rating {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 12px;
+      color: #b08c4f;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .reviews-link {
+      text-decoration: underline;
+      cursor: pointer;
+      color: #2c2f33;
+      transition: color 0.2s ease;
+    }
+    .reviews-link:hover {
+      color: #b0184a;
+    }
+
+    .specialization {
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+
+    .experience {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 12px;
+    }
+
+    .expertise-badge {
+      background: #f8e5ee;
+      color: #b0184a;
+      font-weight: 600;
+      font-size: 0.8rem;
+      padding: 4px 16px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 14px;
+      letter-spacing: 0.3px;
+    }
+
+    .description-text {
+      font-size: 0.9rem;
+      color: #4a4a4a;
+      margin: 0 5px 18px 5px;
+      line-height: 1.5;
+      font-style: italic;
+    }
+
+    .before-after-gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      margin: 6px 0 18px 0;
+      width: 100%;
+    }
+
+    .ba-pair {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .ba-image {
+      width: 115px; 
+      height: 115px; 
+      border-radius: 12px;
+      background: #e9e9e9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #777;
+      text-transform: uppercase;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s;
+    }
+
+    .ba-image:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .ba-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #b0184a;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+
+    .ba-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .view-all-works-btn {
+      background: transparent;
+      border: 1.5px solid #b0184a;
+      color: #b0184a;
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: 0.25s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+      background: white;
+    }
+
+    .view-all-works-btn:hover {
+      background: #b0184a;
+      color: white;
+      border-color: #b0184a;
+    }
+
+    .portfolio {
+      display: none;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 15px;
+      justify-content: center;
+      background: #f9f5f6;
+      padding: 15px;
+      border-radius: 16px;
+    }
+
+    .reviews-modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 24px;
+      max-width: 550px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      border: 3px solid #ffb6c1;
+      position: relative;
+      cursor: default;
+      animation: zoomIn 0.25s ease;
+      text-align: left;
+    }
+
+    .close-reviews-modal {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      color: #2c2f33;
+      font-size: 32px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .close-reviews-modal:hover {
+      color: #b0184a;
+    }
+
+    .review-item {
+      border-bottom: 1px solid #fce4ec;
+      padding: 15px 0;
+    }
+    .review-item:last-child {
+      border-bottom: none;
+    }
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .review-client {
+      font-weight: 700;
+      color: #2c2f33;
+      font-size: 0.95rem;
+    }
+    .review-stars {
+      color: #b08c4f;
+      font-size: 0.9rem;
+    }
+    .review-text {
+      font-size: 0.9rem;
+      color: #4a4a4a;
+      font-style: italic;
+      line-height: 1.4;
+    }
+
+    /* Стили для формы добавления отзыва */
+    .add-review-section {
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 2px dashed #fce4ec;
+    }
+
+    .add-review-section h4 {
+      color: #b0184a;
+      margin-bottom: 15px;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .add-review-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .add-review-form input, 
+    .add-review-form select, 
+    .add-review-form textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ffb6c1;
+      border-radius: 8px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .add-review-form input:focus, 
+    .add-review-form select:focus, 
+    .add-review-form textarea:focus {
+      border-color: #b0184a;
+    }
+
+    .add-review-form button {
+      background: #b0184a;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .add-review-form button:hover {
+      background: #8a133a;
+    }
+
+    @media (max-width: 1000px) {
+      .masters-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .master-card {
+        grid-column: span 1 !important; 
+      }
+    }
+
+    @media (max-width: 700px) {
+      .masters-grid {
+        grid-template-columns: 1fr;
+        padding: 15px;
+      }
+      .navbar-top {
+        flex-direction: column;
+        gap: 10px;
+        padding: 15px;
+        text-align: center;
+      }
+      nav a {
+        margin: 5px 10px;
+        font-size: 12px;
+      }
+      .ba-image {
+        width: 90px;
+        height: 90px;
+      }
+    }
+
+    .photo-modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.85);
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(8px);
+      cursor: zoom-out;
+    }
+
+    .photo-modal-content {
+      max-width: 90%;
+      max-height: 85vh;
+      border-radius: 20px;
+      object-fit: contain;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      border: 3px solid #ffb6c1;
+      animation: zoomIn 0.25s ease;
+    }
+
+    @keyframes zoomIn {
+      from { transform: scale(0.85); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .close-photo-modal {
+      position: absolute;
+      top: 25px;
+      right: 35px;
+      color: #fff;
+      font-size: 42px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .close-photo-modal:hover {
+      color: #ffb6c1;
+    }
+
+    .sparkle {
+      position: fixed;
+      font-family: serif;
+      pointer-events: none;
+      z-index: 0;
+      animation: glamFloat linear infinite;
+      opacity: 0;
+      text-shadow: 0 0 5px #ffffff, 0 0 10px #ffb6c1;
+    }
+
+    @keyframes glamFloat {
+      0% { opacity: 0; transform: translateY(20px) rotate(0deg) scale(0.6); }
+      15% { opacity: 0.8; }
+      85% { opacity: 0.8; }
+      100% { opacity: 0; transform: translateY(-60px) rotate(180deg) scale(1.2); }
+    }
+  </style>
+</head>
+<body>
+  
+  <div id="adminPanel" class="admin-panel">
+    <div style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; flex-wrap: wrap; gap: 10px;">
+      <h2>⚙️ Управление персоналом (Администратор)</h2>
+      <div>
+        <button onclick="toggleAddForm()" style="background: #2e7d32; color: white; border: none; padding: 8px 15px; cursor: pointer; border-radius: 4px; font-weight: bold; margin-right: 10px;">➕ Добавить мастера</button>
+        <button onclick="restoreMasters()" style="background: #4f5d75; border: none; font-weight: bold; border-radius: 4px; color: white; padding: 8px 15px; cursor: pointer; margin-right: 10px;">Восстановить всех</button>
+        <button onclick="logoutAdmin()" style="background:#b0184a; color:white; border:none; padding:8px 15px; cursor:pointer; border-radius:4px; font-weight: bold;">Выйти</button>
+      </div>
+    </div>
+
+    <div id="addMasterBlock" style="display: none; max-width: 1200px; margin: 20px auto 0 auto; background: #2c2f33; padding: 20px; border-radius: 12px; border: 1px solid #444;">
+      <h3 style="color: #ffb6c1; margin-bottom: 15px;">Регистрация нового сотрудника в системе</h3>
+      <form id="newMasterForm" onsubmit="saveNewMaster(event)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
+        <div>
+          <label style="color: #ccc; font-size: 12px;">ФИО мастера:</label>
+          <input type="text" id="new_name" required placeholder="Например: Дарья Морозова">
+        </div>
+        <div>
+          <label style="color: #ccc; font-size: 12px;">Должность:</label>
+          <input type="text" id="new_job" required placeholder="Например: Стилист-колорист">
+        </div>
+        <div>
+          <label style="color: #ccc; font-size: 12px;">Специализация через запятую:</label>
+          <input type="text" id="new_spec" required placeholder="Например: Брови, Макияж, Укладки">
+        </div>
+        <div>
+          <label style="color: #ccc; font-size: 12px;">Стаж работы:</label>
+          <input type="text" id="new_exp" required placeholder="Например: 2 года или 5 лет">
+        </div>
+        <div>
+          <label style="color: #ccc; font-size: 12px;">Яркий бейдж достижений:</label>
+          <input type="text" id="new_badge" required placeholder="Например: Эксперт по вечерним образам">
+        </div>
+        <div>
+          <label style="color: #ccc; font-size: 12px;">Главное фото (файл/ссылка):</label>
+          <input type="text" id="new_photo" required placeholder="Например: default-master.jpg">
+        </div>
+        <div>
+          <label style="color: #ccc; font-size: 12px;">Фото работы (ДО):</label>
+          <input type="text" id="new_photo_do" required placeholder="Например: work_do.jpg">
+        </div>
+        <div>
+          <label style="color: #ccc; font-size: 12px;">Фото работы (ПОСЛЕ):</label>
+          <input type="text" id="new_photo_posle" required placeholder="Например: work_posle.jpg">
+        </div>
+        <div style="grid-column: 1 / -1;">
+          <label style="color: #ccc; font-size: 12px;">Краткое приветствие / цитата мастера:</label>
+          <textarea id="new_desc" required rows="3" placeholder="Люблю создавать неповторимые образы..."></textarea>
+        </div>
+        <div style="grid-column: 1 / -1; text-align: right;">
+          <button type="submit" style="background: #ffb6c1; color: #2c2f33; border: none; padding: 10px 25px; font-weight: bold; border-radius: 8px; cursor: pointer; font-size: 14px;">Сохранить сотрудника на сайте</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <header>
+    <div class="navbar-top">
+      <a href="index.html" class="logo-text">Wonder</a>
+      <div style="display: flex; align-items: center; gap: 20px;">
+        <div style="display: flex; gap: 15px; font-family: 'Montserrat', sans-serif; font-size: 13.5px; color: #e0e0e0; flex-wrap: wrap;">
+          <span style="display: flex; align-items: center; gap: 6px;">
+            <svg style="width: 16px; height: 16px; color: #ffb6c1;" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            г. Нижний Ломов, ул. Колбасенко, 1
+          </span>
+          <span style="display: flex; align-items: center; gap: 6px;">
+            <svg style="width: 16px; height: 16px; color: #ffb6c1;" viewBox="0 0 24 24"><path fill="currentColor" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+            +7 (999) 000-00-00
+          </span>
+        </div>
+        <button style="background: #b0184a; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold;">Записаться</button>
+      </div>
+    </div>
+    <nav>
+      <a href="index.html">Главная</a>
+      <a href="masters.html" class="active">Мастера</a>
+      <a href="services.html">Прайс-лист</a>
+      <a href="articles.html">Полезные статьи</a>
+      <a href="reviews.html">Отзывы</a>
+       <a href="contacts.html">Контакты</a>
+    </nav>
+  </header>
+
+  <h1 style="text-align: center; color: #2c2f33; margin-top: 40px; font-weight: 700; font-size: 2.2rem;">Команда профессионалов "Wonder"</h1>
+  <p style="text-align: center; color: #4a4a4a; margin-bottom: 40px; font-weight: 500;">Наши мастера помогут вам подчеркнуть индивидуальность</p>
+
+  <div class="masters-grid">
+    
+    <div class="master-card" id="card_angelina">
+      <img src="angelina.jpg" class="master-photo" alt="Ангелина">
+      <div class="master-name"><span id="name_angelina">Ангелина Макеева</span><button class="edit-btn" onclick="editMasterText('name_angelina')">[✎]</button></div>
+      <div class="master-job"><span id="job_angelina">Администратор, стилист</span><button class="edit-btn" onclick="editMasterText('job_angelina')">[✎]</button></div>
+      <div class="rating">★ 4.9 · <span class="reviews-link" id="count_angelina" onclick="openReviewsModal('angelina', 'Ангелине Макеевой')">67 оценок</span></div>
+      <div class="specialization">Топ-стилист, колорист</div>
+      <div class="experience"><span>⏱️</span> Стаж 5 лет</div>
+      <div class="expertise-badge">Эксперт в сложных окрашиваниях</div>
+      <div class="description-text">
+        <span id="desc_angelina">Люблю работать с оттенками, которые подчёркивают натуральную красоту. Делаю бережное осветление и бебилайтс.</span><button class="edit-btn" onclick="editMasterText('desc_angelina')">[✎]</button>
+      </div>
+      <div class="before-after-gallery">
+        <div class="ba-pair">
+          <div class="ba-column"><span class="ba-label">До</span><div class="ba-image" style="background-image: url('kraskaDO1.jpg');" onclick="openPhotoModal('kraskaDO1.jpg')"></div></div>
+          <div class="ba-column"><span class="ba-label">После</span><div class="ba-image" style="background-image: url('kraskaPOSLE1.jpg');" onclick="openPhotoModal('kraskaPOSLE1.jpg')"></div></div>
+        </div>
+      </div>
+      <button class="view-all-works-btn" onclick="togglePortfolio('angelina-work')">👁 Смотреть все работы</button>
+      <button class="fire-btn" onclick="fireMaster('card_angelina')">Уволить</button>
+      <div id="angelina-work" class="portfolio">
+        <p style="width:100%; text-align:center; color:#888; font-size:0.8rem;">✨ Здесь скоро появятся новые работы ✨</p>
+      </div>
+    </div>
+
+    <div class="master-card" id="card_sofiya">
+      <img src="sofiya.jpg" class="master-photo" alt="Софья">
+      <div class="master-name"><span id="name_sofiya">Софья Романова</span><button class="edit-btn" onclick="editMasterText('name_sofiya')">[✎]</button></div>
+      <div class="master-job"><span id="job_sofiya">Мастер по стрижкам</span><button class="edit-btn" onclick="editMasterText('job_sofiya')">[✎]</button></div>
+      <div class="rating">★ 4.8 · <span class="reviews-link" id="count_sofiya" onclick="openReviewsModal('sofiya', 'Софье Романовой')">27 оценок</span></div>
+      <div class="specialization">Стилист-парикмахер</div>
+      <div class="experience"><span>⏱️</span> Стаж 4 года</div>
+      <div class="expertise-badge">Идеальные стрижки и укладки</div>
+      <div class="description-text">
+        <span id="desc_sofiya">Создаю стрижки, которые живут в ритме города. Классика или авангард — найду форму, подходящую именно вам.</span><button class="edit-btn" onclick="editMasterText('desc_sofiya')">[✎]</button>
+      </div>
+      <div class="before-after-gallery">
+        <div class="ba-pair">
+          <div class="ba-column"><span class="ba-label">До</span><div class="ba-image" style="background-image: url('strizhkaDO1.jpg');" onclick="openPhotoModal('strizhkaDO1.jpg')"></div></div>
+          <div class="ba-column"><span class="ba-label">После</span><div class="ba-image" style="background-image: url('strizhkaPOSLE1.jpg');" onclick="openPhotoModal('strizhkaPOSLE1.jpg')"></div></div>
+        </div>
+      </div>
+      <button class="view-all-works-btn" onclick="togglePortfolio('sofiya-work')">👁 Смотреть все работы</button>
+      <button class="fire-btn" onclick="fireMaster('card_sofiya')">Уволить</button>
+      <div id="sofiya-work" class="portfolio">
+        <p style="width:100%; text-align:center; color:#888; font-size:0.8rem;">✨ Здесь скоро появятся новые работы ✨</p>
+      </div>
+    </div>
+
+    <div class="master-card" id="card_marianna">
+      <img src="marianna.jpg" class="master-photo" alt="Марианна">
+      <div class="master-name"><span id="name_marianna">Марианна Орлова</span><button class="edit-btn" onclick="editMasterText('name_marianna')">[✎]</button></div>
+      <div class="master-job"><span id="job_marianna">Стилист-технолог</span><button class="edit-btn" onclick="editMasterText('job_marianna')">[✎]</button></div>
+      <div class="rating">★ 4.9 · <span class="reviews-link" id="count_marianna" onclick="openReviewsModal('marianna', 'Марианне Орловой')">41 оценка</span></div>
+      <div class="specialization">Кератин, ботокс, восстановление</div>
+      <div class="experience"><span>⏱️</span> Стаж 6 лет</div>
+      <div class="expertise-badge">Эксперт уходовых процедур</div>
+      <div class="description-text">
+        <span id="desc_marianna">Возвращаю волосам жизнь после окрашиваний и стресса. Мои ритуалы — кератин, ламинирование и глубокое восстановление.</span><button class="edit-btn" onclick="editMasterText('desc_marianna')">[✎]</button>
+      </div>
+      <div class="before-after-gallery">
+        <div class="ba-pair">
+          <div class="ba-column"><span class="ba-label">До</span><div class="ba-image" style="background-image: url('keratinDO1.jpg');" onclick="openPhotoModal('keratinDO1.jpg')"></div></div>
+          <div class="ba-column"><span class="ba-label">После</span><div class="ba-image" style="background-image: url('keratinPOSLE1.jpg');" onclick="openPhotoModal('keratinPOSLE1.jpg')"></div></div>
+        </div>
+      </div>
+      <button class="view-all-works-btn" onclick="togglePortfolio('marianna-work')">👁 Смотреть все работы</button>
+      <button class="fire-btn" onclick="fireMaster('card_marianna')">Уволить</button>
+      <div id="marianna-work" class="portfolio">
+        <p style="width:100%; text-align:center; color:#888; font-size:0.8rem;">✨ Здесь скоро появятся новые работы ✨</p>
+      </div>
+    </div>
+
+    <div class="master-card" id="card_varvara">
+      <img src="varvara.jpg" class="master-photo" alt="Варвара">
+      <div class="master-name"><span id="name_varvara">Варвара Савельева</span><button class="edit-btn" onclick="editMasterText('name_varvara')">[✎]</button></div>
+      <div class="master-job"><span id="job_varvara">Стилист</span><button class="edit-btn" onclick="editMasterText('job_varvara')">[✎]</button></div>
+      <div class="rating">★ 4.8 · <span class="reviews-link" id="count_varvara" onclick="openReviewsModal('varvara', 'Варваре Савельевой')">19 оценок</span></div>
+      <div class="specialization">Укладки и прически</div>
+      <div class="experience"><span>⏱️</span> Стаж 3 года</div>
+      <div class="expertise-badge">Вечерние и свадебные образы</div>
+      <div class="description-text">
+        <span id="desc_varvara">Превращаю повседневность в праздник. Локоны, пучки, голливудская волна — создаю настроение через причёску.</span><button class="edit-btn" onclick="editMasterText('desc_varvara')">[✎]</button>
+      </div>
+      <div class="before-after-gallery">
+        <div class="ba-pair">
+          <div class="ba-column"><span class="ba-label">До</span><div class="ba-image" style="background-image: url('pricheskaDO1.jpg');" onclick="openPhotoModal('pricheskaDO1.jpg')"></div></div>
+          <div class="ba-column"><span class="ba-label">После</span><div class="ba-image" style="background-image: url('pricheskaPOSLE11.jpg');" onclick="openPhotoModal('pricheskaPOSLE11.jpg')"></div></div>
+        </div>
+      </div>
+      <button class="view-all-works-btn" onclick="togglePortfolio('varvara-work')">👁 Смотреть все работы</button>
+      <button class="fire-btn" onclick="fireMaster('card_varvara')">Уволить</button>
+      <div id="varvara-work" class="portfolio">
+        <p style="width:100%; text-align:center; color:#888; font-size:0.8rem;">✨ Здесь скоро появятся новые работы ✨</p>
+      </div>
+    </div>
+
+    <div class="master-card" id="card_roman">
+      <img src="roman.jpg" class="master-photo" alt="Роман">
+      <div class="master-name"><span id="name_roman">Роман Леонов</span><button class="edit-btn" onclick="editMasterText('name_roman')">[✎]</button></div>
+      <div class="master-job"><span id="job_roman">Барбер</span><button class="edit-btn" onclick="editMasterText('job_roman')">[✎]</button></div>
+      <div class="rating">★ 4.9 · <span class="reviews-link" id="count_roman" onclick="openReviewsModal('roman', 'Роману Леоновову')">52 оценки</span></div>
+      <div class="specialization">Мужские стрижки, бороды</div>
+      <div class="experience"><span>⏱️</span> Стаж 7 лет</div>
+      <div class="expertise-badge">Точность и стиль</div>
+      <div class="description-text">
+        <span id="desc_roman">Барберинг — это характер. Делаю мужские стрижки и оформление бороды, которые подчёркивают уверенность.</span><button class="edit-btn" onclick="editMasterText('desc_roman')">[✎]</button>
+      </div>
+      <div class="before-after-gallery">
+        <div class="ba-pair">
+          <div class="ba-column"><span class="ba-label">До</span><div class="ba-image" style="background-image: url('barberDO1.jpg');" onclick="openPhotoModal('barberDO1.jpg')"></div></div>
+          <div class="ba-column"><span class="ba-label">После</span><div class="ba-image" style="background-image: url('barberPOSLE1.jpg');" onclick="openPhotoModal('barberPOSLE1.jpg')"></div></div>
+        </div>
+      </div>
+      <button class="view-all-works-btn" onclick="togglePortfolio('roman-work')">👁 Смотреть все работы</button>
+      <button class="fire-btn" onclick="fireMaster('card_roman')">Уволить</button>
+      <div id="roman-work" class="portfolio">
+        <p style="width:100%; text-align:center; color:#888; font-size:0.8rem;">✨ Здесь скоро появятся новые работы ✨</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-container">
+      <p>© 2026 Салон красоты "Wonder". Все права защищены.</p>
+      <p>г. Нижний Ломов, ул. Колбасенко, д. 1 | Тел: +7 (999) 000-00-00</p>
+      <p style="margin-top: 15px;"><a href="#" onclick="loginAdmin(event)" style="color: #ffb6c1; font-size: 11px; text-decoration: underline;">Вход для персонала (Администратор)</a></p>
+    </div>
+  </footer>
+
+  <button id="scrollToTopBtn" title="Наверх">▲</button>
+
+  <div id="photoModal" class="photo-modal" onclick="closePhotoModal()">
+    <span class="close-photo-modal">&times;</span>
+    <img class="photo-modal-content" id="imgModal">
+  </div>
+
+  <div id="reviewsModal" class="photo-modal" onclick="closeReviewsModal()">
+    <div class="reviews-modal-content" onclick="event.stopPropagation()">
+      <span class="close-reviews-modal" onclick="closeReviewsModal()">&times;</span>
+      <h3 id="reviewsTitle" style="margin-bottom: 5px; color: #b0184a; font-family: 'Montserrat', sans-serif; font-weight: 700;">Отзывы</h3>
+      <p style="font-size: 0.8rem; color: #888; margin-bottom: 15px; font-style: italic;">Показаны последние добавленные отзывы</p>
+      
+      <div id="reviewsContainer">
+        </div>
+
+      <div class="add-review-section">
+        <h4>Оставить свой отзыв</h4>
+        <div class="add-review-form">
+          <input type="text" id="newRevName" placeholder="Ваше имя" required>
+          <select id="newRevStars">
+            <option value="★★★★★">★★★★★ (Отлично)</option>
+            <option value="★★★★☆">★★★★☆ (Хорошо)</option>
+            <option value="★★★☆☆">★★★☆☆ (Нормально)</option>
+            <option value="★★☆☆☆">★★☆☆☆ (Плохо)</option>
+            <option value="★☆☆☆☆">★☆☆☆☆ (Ужасно)</option>
+          </select>
+          <textarea id="newRevText" rows="3" placeholder="Расскажите о своих впечатлениях..." required></textarea>
+          <button onclick="submitReview()">Отправить отзыв</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Блёстки
+    function createSparkle() {
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('sparkle');
+      const starTypes = ['✦', '✧', '✦'];
+      sparkle.innerText = starTypes[Math.floor(Math.random() * starTypes.length)];
+      sparkle.style.fontSize = `${Math.random() * 12 + 12}px`;
+      sparkle.style.left = `${Math.random() * 100}vw`;
+      sparkle.style.top = `${Math.random() * 100}vh`;
+      sparkle.style.color = ['#ffffff', '#fff3cd', '#ffe4e1'][Math.floor(Math.random()*3)];
+      sparkle.style.animationDuration = `${Math.random() * 3 + 3}s`;
+      document.body.appendChild(sparkle);
+      setTimeout(() => sparkle.remove(), 6000);
+    }
+    setInterval(createSparkle, 400);
+
+    function togglePortfolio(id) {
+      var x = document.getElementById(id);
+      if (x.style.display === "none" || x.style.display === "") {
+        x.style.display = "flex";
+      } else {
+        x.style.display = "none";
+      }
+    }
+
+    window.addEventListener('scroll', function() {
+      var topBtn = document.getElementById("scrollToTopBtn");
+      if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+        topBtn.classList.add("show");
+      } else {
+        topBtn.classList.remove("show");
+      }
+    });
+
+    document.getElementById("scrollToTopBtn").addEventListener("click", function() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    function openPhotoModal(src) {
+      const modal = document.getElementById("photoModal");
+      const modalImg = document.getElementById("imgModal");
+      modal.style.display = "flex";
+      modalImg.src = src;
+    }
+
+    function closePhotoModal() {
+      document.getElementById("photoModal").style.display = "none";
+    }
+
+    // --- ДАННЫЕ И ЛОГИКА ОТЗЫВОВ ---
+    let currentMasterForReview = ''; 
+
+    const baseReviewCounts = {
+      angelina: 67,
+      sofiya: 27,
+      marianna: 41,
+      varvara: 19,
+      roman: 52
+    };
+
+    const initialReviews = {
+      angelina: [
+        { author: "Екатерина В.", stars: "★★★★★", text: "Ангелина — просто волшебница колористики! Сложный аиртач получился идеальным." },
+        { author: "Мария К.", stars: "★★★★★", text: "Очень вежливый администратор и первоклассный стилист в одном лице. Спасибо!" },
+        { author: "Алина С.", stars: "★★★★☆", text: "Отличный мастер, цвет лег ровно, волосы живые." },
+        { author: "Дарья", stars: "★★★★★", text: "Делала выход из черного. Ангелина спасла мои волосы, я в восторге!" }
+      ],
+      sofiya: [
+        { author: "Ольга Л.", stars: "★★★★★", text: "Сделала у Софьи каре. Форма держится отлично даже без долгой укладки." },
+        { author: "Анна Д.", stars: "★★★★☆", text: "Хороший мастер, аккуратная работа. Стрижкой довольна." },
+        { author: "Лена", stars: "★★★★★", text: "Софья подобрала мне идеальную челку, хотя я очень боялась стричься!" },
+        { author: "Светлана", stars: "★★★★★", text: "Золотые руки! Укладка продержалась 2 дня." }
+      ],
+      marianna: [
+        { author: "Кристина М.", stars: "★★★★★", text: "После процедуры глубокого восстановления у Марианны волосы блестят как в рекламе!" },
+        { author: "Ирина", stars: "★★★★★", text: "Делала кератин. Волосы прямые, гладкие, забыла про утюжок." },
+        { author: "Юлия В.", stars: "★★★★☆", text: "Процедура долгая, но результат того стоит. Мастер очень внимательная." },
+        { author: "Настя", stars: "★★★★★", text: "Спасла мои сожженные блондом волосы ботоксом. Спасибо огромное!" }
+      ],
+      varvara: [
+        { author: "Татьяна С.", stars: "★★★★★", text: "Варвара делала мне прическу на свадьбу. Локоны выдержали танцы до ночи!" },
+        { author: "Виктория", stars: "★★★★★", text: "Собрала меня на выпускной за час. Выглядело потрясающе." },
+        { author: "Евгения", stars: "★★★★★", text: "Очень нежный и стойкий макияж и укладка. На фотосессии была королевой." },
+        { author: "Ксюша", stars: "★★★★☆", text: "Хороший мастер, прислушивается к пожеланиям." }
+      ],
+      roman: [
+        { author: "Дмитрий П.", stars: "★★★★★", text: "Отличный барбер. Стрижка аккуратная, бороду оформил четко по контуру." },
+        { author: "Алексей", stars: "★★★★★", text: "Лучший фейд в городе. Хожу только к Роману." },
+        { author: "Игорь", stars: "★★★★★", text: "Атмосферно, быстро и качественно. Мастер своего дела." },
+        { author: "Максим", stars: "★★★★★", text: "Посоветовал форму бороды, которая мне реально подошла. Респект." }
+      ]
+    };
+
+    let allReviews = JSON.parse(localStorage.getItem('wonder_reviews'));
+    if (!allReviews) {
+      allReviews = initialReviews;
+      localStorage.setItem('wonder_reviews', JSON.stringify(allReviews));
+    }
+
+    function updateReviewCounts() {
+      for (const key in baseReviewCounts) {
+        const countSpan = document.getElementById('count_' + key);
+        if (countSpan) {
+          const extraReviews = allReviews[key] ? allReviews[key].length - initialReviews[key].length : 0;
+          const total = baseReviewCounts[key] + (extraReviews > 0 ? extraReviews : 0);
+          countSpan.innerText = total + " отзывов";
+        }
+      }
+    }
+    
+    updateReviewCounts();
+
+    function openReviewsModal(masterKey, masterName) {
+      currentMasterForReview = masterKey;
+      const modal = document.getElementById("reviewsModal");
+      const title = document.getElementById("reviewsTitle");
+      
+      title.innerText = `Отзывы о мастере: ${masterName}`;
+      renderReviewsList();
+      
+      modal.style.display = "flex";
+    }
+
+    function renderReviewsList() {
+      const container = document.getElementById("reviewsContainer");
+      container.innerHTML = "";
+      
+      const reviews = allReviews[currentMasterForReview] || [];
+      
+      [...reviews].reverse().forEach(rev => {
+        const item = document.createElement("div");
+        item.classList.add("review-item");
+        item.innerHTML = `
+          <div class="review-header">
+            <span class="review-client">${rev.author}</span>
+            <span class="review-stars">${rev.stars}</span>
+          </div>
+          <div class="review-text">"${rev.text}"</div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function closeReviewsModal() {
+      document.getElementById("reviewsModal").style.display = "none";
+      document.getElementById("newRevName").value = '';
+      document.getElementById("newRevText").value = '';
+    }
+
+    function submitReview() {
+      const name = document.getElementById("newRevName").value.trim();
+      const stars = document.getElementById("newRevStars").value;
+      const text = document.getElementById("newRevText").value.trim();
+
+      if (!name || !text) {
+        alert("Пожалуйста, заполните имя и текст отзыва.");
+        return;
+      }
+
+      const newReview = { author: name, stars: stars, text: text };
+      
+      if (!allReviews[currentMasterForReview]) {
+        allReviews[currentMasterForReview] = [];
+      }
+      
+      allReviews[currentMasterForReview].push(newReview);
+      localStorage.setItem('wonder_reviews', JSON.stringify(allReviews));
+
+      document.getElementById("newRevName").value = '';
+      document.getElementById("newRevText").value = '';
+
+      renderReviewsList();
+      updateReviewCounts();
+      
+      alert("Спасибо! Ваш отзыв успешно добавлен.");
+    }
+
+    // --- ЛОГИКА АДМИН-ПАНЕЛИ И ДОБАВЛЕНИЯ МАСТЕРОВ ---
+    function loginAdmin(event) {
+      event.preventDefault();
+      var password = prompt("Введите пароль для входа в панель администратора:");
+      if (password === "1234") {
+        localStorage.setItem('isAdmin', 'true');
+        showAdminInterface();
+      } else if (password !== null) {
+        alert("Неверный пароль!");
+      }
+    }
+
+    function logoutAdmin() {
+      localStorage.removeItem('isAdmin');
+      location.reload();
+    }
+
+    function getAllMasterIds() {
+      return ['card_angelina', 'card_sofiya', 'card_marianna', 'card_varvara', 'card_roman'];
+    }
+
+    function showAdminInterface() {
+      document.body.classList.add('admin-mode');
+      document.getElementById("adminPanel").style.display = "block";
+      
+      getAllMasterIds().forEach(id => {
+        if (localStorage.getItem(id + '_fired') === 'true') {
+          const btn = document.querySelector(`#${id} .fire-btn`);
+          if (btn) {
+            btn.innerText = "Восстановить";
+            btn.style.backgroundColor = "#2e7d32";
+          }
+        }
+      });
+    }
+
+    function toggleAddForm() {
+      var block = document.getElementById("addMasterBlock");
+      block.style.display = (block.style.display === "none" || block.style.display === "") ? "block" : "none";
+    }
+
+    function saveNewMaster(e) {
+      e.preventDefault();
+      
+      const newMaster = {
+        id: "card_custom_" + Date.now(),
+        name: document.getElementById("new_name").value,
+        job: document.getElementById("new_job").value,
+        spec: document.getElementById("new_spec").value,
+        exp: document.getElementById("new_exp").value,
+        badge: document.getElementById("new_badge").value,
+        photo: document.getElementById("new_photo").value,
+        photoDo: document.getElementById("new_photo_do").value,
+        photoPosle: document.getElementById("new_photo_posle").value,
+        desc: document.getElementById("new_desc").value
+      };
+
+      let customMasters = JSON.parse(localStorage.getItem('custom_masters') || '[]');
+      customMasters.push(newMaster);
+      localStorage.setItem('custom_masters', JSON.stringify(customMasters));
+
+      appendMasterToGrid(newMaster);
+
+      document.getElementById("newMasterForm").reset();
+      toggleAddForm();
+      alert("Новый мастер успешно добавлен и сохранен!");
+    }
+
+    function appendMasterToGrid(m) {
+      const grid = document.querySelector('.masters-grid');
+      const cardHtml = `
+        <div class="master-card" id="${m.id}">
+          <img src="${m.photo}" class="master-photo" alt="${m.name}">
+          <div class="master-name"><span id="name_${m.id}">${m.name}</span><button class="edit-btn" onclick="editMasterText('name_${m.id}')">[✎]</button></div>
+          <div class="master-job"><span id="job_${m.id}">${m.job}</span><button class="edit-btn" onclick="editMasterText('job_${m.id}')">[✎]</button></div>
+          <div class="rating">★ 5.0 · <span class="reviews-link" id="count_${m.id}" onclick="openReviewsModal('${m.id}', '${m.name}')">0 отзывов</span></div>
+          <div class="specialization">${m.spec}</div>
+          <div class="experience"><span>⏱️</span> Стаж ${m.exp}</div>
+          <div class="expertise-badge">${m.badge}</div>
+          <div class="description-text">
+            <span id="desc_${m.id}">${m.desc}</span><button class="edit-btn" onclick="editMasterText('desc_${m.id}')">[✎]</button>
+          </div>
+          <div class="before-after-gallery">
+            <div class="ba-pair">
+              <div class="ba-column"><span class="ba-label">До</span><div class="ba-image" style="background-image: url('${m.photoDo}');" onclick="openPhotoModal('${m.photoDo}')"></div></div>
+              <div class="ba-column"><span class="ba-label">После</span><div class="ba-image" style="background-image: url('${m.photoPosle}');" onclick="openPhotoModal('${m.photoPosle}')"></div></div>
+            </div>
+          </div>
+          <button class="view-all-works-btn" onclick="togglePortfolio('${m.id}-work')">👁 Смотреть все работы</button>
+          <button class="fire-btn" onclick="fireMaster('${m.id}')">Уволить</button>
+          <div id="${m.id}-work" class="portfolio">
+            <p style="width:100%; text-align:center; color:#888; font-size:0.8rem;">✨ Здесь скоро появятся новые работы ✨</p>
+          </div>
+        </div>
+      `;
+      grid.insertAdjacentHTML('beforeend', cardHtml);
+    }
+
+    function editMasterText(id) {
+      const el = document.getElementById(id);
+      const newText = prompt("Введите новый текст:", el.innerText);
+      if (newText) el.innerText = newText;
+    }
+
+    function fireMaster(id) {
+      const card = document.getElementById(id);
+      card.classList.toggle('is-fired');
+      const btn = card.querySelector('.fire-btn');
+      if (card.classList.contains('is-fired')) {
+        btn.innerText = "Восстановить";
+        btn.style.backgroundColor = "#2e7d32";
+        localStorage.setItem(id + '_fired', 'true');
+      } else {
+        btn.innerText = "Уволить";
+        btn.style.backgroundColor = "#b0184a";
+        localStorage.removeItem(id + '_fired');
+      }
+    }
+
+    function restoreMasters() {
+      getAllMasterIds().forEach(id => {
+        const card = document.getElementById(id);
+        if (card) {
+          card.classList.remove('is-fired');
+          const btn = card.querySelector('.fire-btn');
+          if (btn) {
+            btn.innerText = "Уволить";
+            btn.style.backgroundColor = "#b0184a";
+          }
+          localStorage.removeItem(id + '_fired');
+        }
+      });
+    }
+
+    window.onload = function() {
+      if (localStorage.getItem('isAdmin') === 'true') {
+        showAdminInterface();
+      }
+      
+      let customMasters = JSON.parse(localStorage.getItem('custom_masters') || '[]');
+      customMasters.forEach(m => appendMasterToGrid(m));
+      
+      // Обновляем счетчики еще раз после загрузки кастомных мастеров
+      updateReviewCounts();
+    }
+  </script>
+</body>
+</html>

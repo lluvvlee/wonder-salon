@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Контакты — Салон красоты "Wonder"</title>
+    <link rel="icon" href="logo.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #fcb5d3;
+            font-family: 'Montserrat', 'Segoe UI', sans-serif;
+            color: #2c2f33;
+            line-height: 1.5;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Навигация */
+        .navbar-top {
+            background: #2c2f33;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            font-size: 14px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo-text {
+            font-family: 'Marck Script', cursive;
+            font-size: 32px;
+            color: #ffb6c1;
+            text-decoration: none;
+        }
+
+        nav {
+            background: #23272a;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 13px;
+            text-transform: uppercase;
+            font-family: 'Montserrat', sans-serif;
+            transition: 0.3s;
+            display: inline-block;
+        }
+
+        nav a:hover {
+            transform: scale(1.1);
+            color: #ffb6c1;
+        }
+        nav a.active {
+            color: #ffb6c1 !important;
+            font-weight: bold;
+            border-bottom: 2px solid #b0184a;
+            padding-bottom: 5px;
+        }
+
+        /* Шапка */
+        .hero {
+            padding: 50px 20px;
+            background: rgba(255, 255, 255, 0.3);
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: #2c2f33;
+        }
+
+        /* Контент страницы контактов */
+        .contact-wrapper {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: flex;
+            gap: 30px;
+            position: relative;
+            z-index: 5;
+            flex-wrap: wrap;
+        }
+
+        .contact-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            flex: 1;
+            min-width: 320px;
+            border-top: 5px solid #b0184a;
+        }
+
+        .contact-card h3 {
+            color: #b0184a;
+            font-size: 22px;
+            margin-bottom: 25px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .contact-info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .contact-info-item svg {
+            width: 24px;
+            height: 24px;
+            color: #b0184a;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .contact-info-text strong {
+            display: block;
+            color: #2c2f33;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .contact-info-text p {
+            color: #555;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .contact-form input:focus, .contact-form textarea:focus {
+            border-color: #b0184a;
+        }
+
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .btn-dark {
+            background: #333;
+            color: white;
+            padding: 15px 40px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
+            font-family: 'Montserrat', sans-serif;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-dark:hover {
+            background: #b0184a;
+        }
+
+        /* Карта */
+        .map-section {
+            max-width: 1200px;
+            margin: 0 auto 50px auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .map-container {
+            width: 100%;
+            height: 400px;
+            background: #e9ecef;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            font-weight: bold;
+        }
+
+        /* Модальные окна */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            animation: zoomIn 0.3s ease;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .close {
+            position: absolute;
+            right: 20px; top: 10px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #aaa;
+            transition: color 0.3s;
+        }
+
+        .close:hover { color: #b0184a; }
+
+        /* Подвал */
+        footer {
+            background: #2c2f33;
+            color: white;
+            padding: 40px 20px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* Панель администратора */
+        .admin-panel {
+            display: none;
+            background: #23272a;
+            color: white;
+            padding: 20px;
+            border-bottom: 4px solid #b0184a;
+            position: relative;
+            z-index: 100;
+        }
+        
+        .edit-btn {
+            display: none;
+            background: #b0184a;
+            color: white;
+            border: none;
+            padding: 3px 8px;
+            font-size: 11px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        body.admin-mode .edit-btn {
+            display: inline-block;
+        }
+
+        /* Кнопка наверх */
+        #scrollToTopBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            width: 50px;
+            height: 50px;
+            background-color: #b0184a;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #scrollToTopBtn.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #scrollToTopBtn:hover {
+            background-color: #333;
+            transform: scale(1.1);
+        }
+
+        /* Блестки */
+        .sparkle {
+            position: fixed;
+            font-family: serif;
+            pointer-events: none;
+            z-index: 0;
+            animation: glamFloat linear infinite;
+            opacity: 0;
+            text-shadow: 0 0 5px #ffffff, 0 0 10px #ffb6c1, 0 0 20px #fff;
+        }
+
+        @keyframes glamFloat {
+            0% { opacity: 0; transform: translateY(20px) rotate(0deg) scale(0.6); }
+            15% { opacity: 0.9; }
+            85% { opacity: 0.9; }
+            100% { opacity: 0; transform: translateY(-80px) rotate(180deg) scale(1.3); }
+        }
+
+        @media (max-width: 768px) {
+            .navbar-top { flex-direction: column; gap: 10px; text-align: center; }
+            .navbar-top div { flex-direction: column; gap: 10px; justify-content: center; width: 100%; }
+            nav { padding: 10px; }
+            nav a { margin: 5px 10px; font-size: 12px; }
+            .contact-wrapper { flex-direction: column; }
+            .map-container { height: 300px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ПАНЕЛЬ АДМИНИСТРАТОРА -->
+    <div id="adminPanel" class="admin-panel">
+        <div style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; flex-wrap: wrap; gap: 10px;">
+            <h2>⚙️ Панель управления салоном (Роль: Администратор)</h2>
+            <button onclick="logoutAdmin()" style="background:#b0184a; color:white; border:none; padding:8px 15px; cursor:pointer; border-radius:4px; font-weight: bold;">Выйти из режима админа</button>
+        </div>
+        <div style="max-width: 1200px; margin: 20px auto 0;">
+            <p style="color: #ccc; font-size: 14px;">Режим редактирования контента активирован. Нажмите на кнопку [Редактировать] рядом с текстом, чтобы изменить его.</p>
+        </div>
+    </div>
+
+    <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
+    <div class="navbar-top">
+        <a href="index.html" class="logo-text">Wonder</a>
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <div style="display: flex; gap: 15px; font-family: 'Montserrat', sans-serif; font-size: 13.5px; color: #e0e0e0; flex-wrap: wrap;">
+                <span style="display: flex; align-items: center; gap: 6px;">
+                    <svg style="width: 16px; height: 16px; color: #ffb6c1; flex-shrink: 0;" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                    г. Нижний Ломов, ул. Колбасенко, 1
+                </span>
+                <span style="display: flex; align-items: center; gap: 6px;">
+                    <svg style="width: 16px; height: 16px; color: #ffb6c1; flex-shrink: 0;" viewBox="0 0 24 24"><path fill="currentColor" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                    +7 (999) 000-00-00
+                </span>
+            </div>
+            <button onclick="openModal()" style="background: #b0184a; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; flex-shrink: 0;">
+                Записаться
+            </button>
+        </div>
+    </div>
+
+    <!-- НАВИГАЦИЯ -->
+    <nav>
+        <a href="index.html">Главная</a>
+        <a href="masters.html">Мастера</a>
+        <a href="services.html">Прайс-лист</a>
+        <a href="articles.html">Полезные статьи</a>
+        <a href="reviews.html">Отзывы</a>
+        <a href="contacts.html" class="active">Контакты</a>
+    </nav>
+
+    <!-- ШАПКА -->
+    <header class="hero">
+        <h1 style="font-family: 'Montserrat', sans-serif;">
+            <span id="contactHeroTitle">Свяжитесь с нами</span>
+            <button class="edit-btn" onclick="editContent('contactHeroTitle')">[Редактировать]</button>
+        </h1>
+        <p style="color: #555; max-width: 600px; margin: 0 auto;">
+            <span id="contactHeroDesc">Ждем вас на преображение! Мы специализируемся на сложных техниках окрашивания, кератиновом выпрямлении волос, а также предлагаем профессиональные мужские стрижки и идеальное оформление бороды.</span>
+            <button class="edit-btn" onclick="editContent('contactHeroDesc')">[Редактировать]</button>
+        </p>
+    </header>
+
+    <!-- ОСНОВНОЙ БЛОК КОНТАКТОВ -->
+    <div class="contact-wrapper">
+        <!-- Левая колонка: Информация -->
+        <div class="contact-card">
+            <h3>Контактная информация</h3>
+            
+            <div class="contact-info-item">
+                <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                <div class="contact-info-text">
+                    <strong>Наш адрес</strong>
+                    <p>
+                        <span id="contactAddress">г. Нижний Ломов, ул. Колбасенко, д. 1</span>
+                        <button class="edit-btn" onclick="editContent('contactAddress')">[Редактировать]</button>
+                    </p>
+                </div>
+            </div>
+
+            <div class="contact-info-item">
+                <svg viewBox="0 0 24 24"><path fill="currentColor" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                <div class="contact-info-text">
+                    <strong>Телефон</strong>
+                    <p>
+                        <span id="contactPhone">+7 (999) 000-00-00</span>
+                        <button class="edit-btn" onclick="editContent('contactPhone')">[Редактировать]</button>
+                    </p>
+                </div>
+            </div>
+
+            <div class="contact-info-item">
+                <svg viewBox="0 0 24 24"><path fill="currentColor" d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                <div class="contact-info-text">
+                    <strong>Режим работы</strong>
+                    <p>
+                        <span id="contactHours">Ежедневно с 10:00 до 18:00</span>
+                        <button class="edit-btn" onclick="editContent('contactHours')">[Редактировать]</button>
+                    </p>
+                </div>
+            </div>
+
+            <div class="contact-info-item">
+                <svg viewBox="0 0 24 24"><path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                <div class="contact-info-text">
+                    <strong>Email</strong>
+                    <p>
+                        <span id="contactEmail">hello@wonder-salon.ru</span>
+                        <button class="edit-btn" onclick="editContent('contactEmail')">[Редактировать]</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Правая колонка: Форма обратной связи -->
+        <div class="contact-card">
+            <h3>Остались вопросы?</h3>
+            <p style="color: #666; margin-bottom: 20px; font-size: 14px;">Напишите нам, и администратор салона свяжется с вами в течение 15 минут для подробной консультации.</p>
+            <form class="contact-form" onsubmit="return submitFeedback(event)">
+                <input type="text" id="fbName" placeholder="Ваше имя" required>
+                <input type="tel" id="fbPhone" placeholder="Ваш телефон" required>
+                <textarea id="fbMessage" placeholder="Ваш вопрос или пожелание" required></textarea>
+                <button type="submit" class="btn-dark">Отправить сообщение</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- КАРТА -->
+    <!-- КАРТА -->
+    <section class="map-section">
+        <div class="map-container">
+           <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A9b19af58851f63bf5fdbe40aed16134e0b84e79b044de90030c186531197c0b6&amp;source=constructor" width="1130" height="493" frameborder="0"></iframe>
+        </div>
+    </section>
+
+    <!-- ПОДВАЛ -->
+    <footer>
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <p>© 2026 Салон красоты "Wonder". Все права защищены.</p>
+            <p>г. Нижний Ломов, ул. Колбасенко, д. 1 | Тел: +7 (999) 000-00-00</p>
+            <p style="margin-top: 15px;">
+                <a href="#" onclick="loginAdmin(event)" style="color: #ffb6c1; font-size: 11px; text-decoration: underline;">
+                    Вход для персонала (Администратор)
+                </a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- МОДАЛЬНОЕ ОКНО ЗАПИСИ -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 style="font-family: 'Marck Script', cursive; color: #b0184a; text-align: center; margin-bottom: 15px;">Записаться</h2>
+            <form id="bookingForm" onsubmit="return submitBooking(event)" style="display: flex; flex-direction: column; gap: 12px;">
+                <div>
+                    <label style="font-size: 12px; color: #666; font-weight: bold;">Мастер:</label>
+                    <select id="bookMaster" style="width:100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;" required>
+                        <option value="Любой свободный мастер">Любой свободный мастер</option>
+                        <option value="Ангелина (Колорист)">Ангелина (Колорист)</option>
+                        <option value="Софья (Стрижки)">Софья (Стрижки)</option>
+                        <option value="Марианна (Уходы)">Марианна (Уходовые процедуры)</option>
+                        <option value="Роман (Барбер)">Роман (Барбер)</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="font-size: 12px; color: #666; font-weight: bold;">Услуга:</label>
+                    <input type="text" id="bookService" placeholder="Например: Сложное окрашивание" style="width:100%; padding:10px; border: 1px solid #ccc; border-radius: 6px; box-sizing:border-box;" required>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <div style="flex: 1;">
+                        <label style="font-size: 12px; color: #666; font-weight: bold;">Дата:</label>
+                        <input type="date" id="bookDate" style="width:100%; padding:10px; border: 1px solid #ccc; border-radius: 6px; box-sizing:border-box;" required>
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="font-size: 12px; color: #666; font-weight: bold;">Время:</label>
+                        <select id="bookingTime" style="width:100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;" required>
+                            <option value="" disabled selected>Время</option>
+                            <option value="10:00">10:00</option>
+                            <option value="11:00">11:00</option>
+                            <option value="12:00">12:00</option>
+                            <option value="14:00">14:00</option>
+                            <option value="16:00">16:00</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <input type="text" id="bookName" placeholder="Ваше имя" style="width:100%; padding:10px; border: 1px solid #ccc; border-radius: 6px; box-sizing:border-box;" required>
+                </div>
+                <div>
+                    <input type="text" id="bookNumber" placeholder="Ваш номер телефона" style="width:100%; padding:10px; border: 1px solid #ccc; border-radius: 6px; box-sizing:border-box;" required>
+                </div>
+                <button type="submit" style="background: #b0184a; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 5px;">Отправить заявку</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- КНОПКА НАВЕРХ -->
+    <button id="scrollToTopBtn" title="Наверх">▲</button>
+
+    <script>
+        // --- ГЕНЕРАЦИЯ ГЛАМУРНЫХ ЗВЕЗД-БЛЕСТОК ---
+        function createSparkle() {
+            const sparkle = document.createElement('div');
+            sparkle.classList.add('sparkle');
+            const starTypes = ['✦', '✧', '✦'];
+            sparkle.innerText = starTypes[Math.floor(Math.random() * starTypes.length)];
+            const size = Math.random() * 12 + 12;
+            sparkle.style.fontSize = `${size}px`;
+            const colors = ['#ffffff', '#fff3cd', '#ffe4e1', '#ffffff'];
+            sparkle.style.color = colors[Math.floor(Math.random() * colors.length)];
+            sparkle.style.left = `${Math.random() * 100}vw`;
+            sparkle.style.top = `${Math.random() * 100}vh`;
+            const duration = Math.random() * 3 + 3;
+            sparkle.style.animationDuration = `${duration}s`;
+            document.body.appendChild(sparkle);
+            setTimeout(() => { sparkle.remove(); }, duration * 1000);
+        }
+        setInterval(createSparkle, 400);
+
+        // --- ЛОГИКА МОДАЛЬНОГО ОКНА ЗАПИСИ ---
+        function openModal() {
+            document.getElementById("bookingModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("bookingModal").style.display = "none";
+            document.getElementById("bookingForm").reset();
+        }
+
+        window.onclick = function(event) {
+            var modal = document.getElementById("bookingModal");
+            if (event.target == modal) closeModal();
+        }
+
+        function submitBooking(event) {
+            event.preventDefault();
+            var newBooking = {
+                name: document.getElementById("bookName").value,
+                master: document.getElementById("bookMaster").value,
+                service: document.getElementById("bookService").value,
+                date: document.getElementById("bookDate").value,
+                time: document.getElementById("bookingTime").value
+            };
+            var currentBookings = JSON.parse(localStorage.getItem('salonBookings')) || [];
+            currentBookings.push(newBooking);
+            localStorage.setItem('salonBookings', JSON.stringify(currentBookings));
+            
+            alert("Спасибо! Ваша заявка успешно отправлена, мы скоро перезвоним.");
+            closeModal();
+            return false;
+        }
+
+        // --- ОТПРАВКА ФОРМЫ ОБРАТНОЙ СВЯЗИ ---
+        function submitFeedback(event) {
+            event.preventDefault();
+            // В реальном проекте тут будет отправка на сервер/почту
+            alert("Ваше сообщение успешно отправлено! Администратор ответит вам в ближайшее время.");
+            event.target.reset();
+            return false;
+        }
+
+        // --- КНОПКА НАВЕРХ ---
+        window.addEventListener('scroll', function() {
+            var topBtn = document.getElementById("scrollToTopBtn");
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                topBtn.classList.add("show");
+            } else {
+                topBtn.classList.remove("show");
+            }
+        });
+        document.getElementById("scrollToTopBtn").addEventListener("click", function() {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+        // --- ЛОГИКА ПАНЕЛИ АДМИНИСТРАТОРА ---
+        function loginAdmin(event) {
+            event.preventDefault();
+            var password = prompt("Введите пароль для входа в панель администратора:");
+            if (password === "1234") {
+                localStorage.setItem('isAdmin', 'true');
+                activateAdminMode();
+            } else if (password !== null) {
+                alert("Неверный пароль! Доступ закрыт.");
+            }
+        }
+
+        function logoutAdmin() {
+            localStorage.removeItem('isAdmin');
+            document.body.classList.remove('admin-mode');
+            document.getElementById("adminPanel").style.display = "none";
+        }
+
+        function activateAdminMode() {
+            document.body.classList.add('admin-mode');
+            document.getElementById("adminPanel").style.display = "block";
+        }
+
+        function editContent(elementId) {
+            var element = document.getElementById(elementId);
+            var currentText = element.innerText;
+            var newText = prompt("Редактирование текста:", currentText);
+            if (newText !== null && newText.trim() !== "") {
+                element.innerText = newText;
+                localStorage.setItem(elementId, newText);
+            }
+        }
+
+        // --- ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ ---
+        window.addEventListener('DOMContentLoaded', function() {
+            // Проверка админ-режима
+            if (localStorage.getItem('isAdmin') === 'true') {
+                activateAdminMode();
+            }
+
+            // Восстановление отредактированных текстов
+            const editableElements = ['contactHeroTitle', 'contactHeroDesc', 'contactAddress', 'contactPhone', 'contactHours', 'contactEmail'];
+            editableElements.forEach(function(id) {
+                if (localStorage.getItem(id)) {
+                    const el = document.getElementById(id);
+                    if (el) el.innerText = localStorage.getItem(id);
+                }
+            });
+
+            // Выделение активного пункта меню
+            const currentFile = window.location.pathname.split("/").pop() || 'contacts.html';
+            document.querySelectorAll('nav a').forEach(function(link) {
+                if (link.getAttribute('href') === currentFile) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

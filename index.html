@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Салон красоты "Wonder"</title>
+    <link rel="icon" href="logo.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #fcb5d3;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Навигация */
+        .navbar-top {
+            background: #2c2f33;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            font-size: 14px;
+        }
+
+        .logo-text {
+            font-family: 'Marck Script', cursive;
+            font-size: 32px;
+            color: #ffb6c1;
+            text-decoration: none;
+        }
+
+        nav {
+            background: #23272a;
+            padding: 15px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 13px;
+            text-transform: uppercase;
+            font-family: 'Montserrat', sans-serif;
+            transition: 0.3s;
+            display: inline-block;
+        }
+
+        nav a:hover {
+            transform: scale(1.1);
+            color: #ffb6c1;
+        }
+nav a.active {
+            color: #ffb6c1 !important;      /* Розовый цвет текста */
+            font-weight: bold;               /* Жирный шрифт */
+            border-bottom: 2px solid #b0184a; /* Элегантное бордовое подчеркивание */
+            padding-bottom: 5px;
+        }
+
+        /* Шапка */
+        .hero {
+            padding: 50px 20px;
+            background: rgba(255, 255, 255, 0.3);
+            text-align: center;
+        }
+
+        /* Основной контейнер */
+        .main-wrapper {
+            display: flex;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            align-items: flex-start;
+        }
+
+        .sidebar {
+            flex: 0 0 250px;
+        }
+
+        .promo-card {
+            background: #fff0f3;
+            border-left: 5px solid #b0184a;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            text-align: left;
+        }
+
+        .promo-card:hover { transform: scale(1.03); }
+
+        .promo-badge {
+            background: #b0184a;
+            color: white;
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 10px;
+            text-transform: uppercase;
+        }
+
+        .content-area {
+            flex: 1;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            text-align: left;
+        }
+
+        /* Секция консультации */
+        .consultation-section {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 60px 20px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .consultation-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .consultation-form input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        .btn-dark {
+            background: #333;
+            color: white;
+            padding: 12px 40px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-dark:hover { background: #b0184a; }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .close {
+            position: absolute;
+            right: 20px; top: 10px;
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        /* Подвал */
+        footer {
+            background: #2c2f33;
+            color: white;
+            padding: 40px 20px;
+            width: 100%;
+            margin-top: 50px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* СТИЛИ КНОПКИ НАВЕРХ */
+        #scrollToTopBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            width: 50px !important;
+            height: 50px !important;
+            min-width: 50px !important;
+            background-color: #b0184a;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            padding-bottom: 4px;
+            box-sizing: border-box;
+            flex-shrink: 0;
+        }
+
+        #scrollToTopBtn.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #scrollToTopBtn:hover {
+            background-color: #333;
+            transform: scale(1.1);
+        }
+
+        /* СТИЛИ ДЛЯ СЕКРЕТНОЙ ПАНЕЛИ АДМИНИСТРАТОРА */
+        .admin-panel {
+            display: none; /* Скрыта по умолчанию */
+            background: #23272a;
+            color: white;
+            padding: 20px;
+            border-bottom: 4px solid #b0184a;
+        }
+        .admin-panel table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: white;
+            color: #333;
+        }
+        .admin-panel th, .admin-panel td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        .admin-panel th { background: #eee; }
+        
+        /* Кнопки быстрого редактирования контента (видны только админу) */
+        .edit-btn {
+            display: none;
+            background: #b0184a;
+            color: white;
+            border: none;
+            padding: 3px 8px;
+            font-size: 11px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        /* --- МОБИЛЬНАЯ ВЁРСТКА ДЛЯ IPHONE И ДРУГИХ СМАРТФОНОВ --- */
+        @media (max-width: 768px) {
+            .navbar-top { flex-direction: column !important; gap: 10px !important; padding: 15px !important; text-align: center !important; }
+            .navbar-top div { flex-direction: column !important; gap: 10px !important; width: 100% !important; justify-content: center !important; }
+            nav { padding: 10px !important; }
+            nav a { margin: 5px 10px !important; font-size: 12px !important; }
+            .hero { padding: 30px 15px !important; }
+            .hero h1 { font-size: 24px !important; }
+            .hero p { font-size: 14px !important; }
+            .main-wrapper { flex-direction: column !important; gap: 20px !important; padding: 0 15px !important; margin: 20px auto !important; }
+            .sidebar { flex: none !important; width: 100% !important; }
+            .content-area { width: 100% !important; box-sizing: border-box !important; padding: 20px !important; }
+            .content-area div[style*="display: flex"] { flex-direction: column !important; gap: 15px !important; }
+            .consultation-form { width: 100% !important; max-width: 100% !important; padding: 0 15px !important; box-sizing: border-box !important; }
+            #scrollToTopBtn { width: 45px !important; height: 45px !important; min-width: 45px !important; bottom: 20px !important; right: 20px !important; }
+        }
+
+        /* --- АНИМАЦИЯ БЛЕСТОК НА ФОНЕ --- */
+        /* --- НОВЫЕ ГЛАМУРНЫЕ БЛЕСТКИ С НЕОНОВЫМ СВЕЧЕНИЕМ --- */
+.sparkle {
+    position: fixed;
+    font-family: serif;
+    line-height: 1;
+    pointer-events: none;
+    z-index: 0;
+    animation: glamFloat linear infinite;
+    opacity: 0;
+    text-shadow: 0 0 5px #ffffff, 0 0 10px #ffb6c1, 0 0 20px #fff;
+}
+
+@keyframes glamFloat {
+    0% {
+        opacity: 0;
+        transform: translateY(20px) rotate(0deg) scale(0.6);
+    }
+    15% {
+        opacity: 0.9;
+    }
+    85% {
+        opacity: 0.9;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-80px) rotate(180deg) scale(1.3);
+    }
+}
+
+/* Обязательно добавь z-index главным блокам, чтобы блёстки летали НАД фоном, но ЗА текстом */
+.navbar-top, nav, .hero, .about-section, .features, .faq-section, footer, .modal-overlay {
+    position: relative;
+    z-index: 1;
+}
+
+        /* Чтобы контент гарантированно был поверх блесток */
+        .main-wrapper, header, footer, .consultation-section, .master-card, table, .admin-panel {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* --- СЕКЦИЯ FAQ (АККОРДЕОН) --- */
+        .faq-section {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .faq-title {
+            font-family: 'Montserrat', sans-serif;
+            color: #2c2f33;
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .faq-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background: #b0184a;
+            margin: 10px auto 0;
+        }
+
+        .faq-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #eee;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            width: 100%;
+            background: none;
+            border: none;
+            text-align: left;
+            padding: 18px 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.3s;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .faq-question:hover {
+            color: #b0184a;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            padding: 0 10px;
+            color: #666;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .faq-answer p {
+            margin-bottom: 15px;
+            margin-top: 0;
+        }
+
+        /* Поворот стрелочки при раскрытии */
+        .faq-icon {
+            transition: transform 0.3s;
+            color: #b0184a;
+            font-size: 12px;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="adminPanel" class="admin-panel">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>⚙️ Панель управления салоном (Роль: Администратор)</h2>
+            <button onclick="logoutAdmin()" style="background:#b0184a; color:white; border:none; padding:8px 15px; cursor:pointer; border-radius:4px;">Выйти из режима админа</button>
+        </div>
+        
+        <h3>Список онлайн-записей клиентов:</h3>
+        <table id="bookingsTable">
+            <thead>
+                <tr>
+                    <th>Имя клиента</th>
+                    <th>Мастер</th>
+                    <th>Услуга</th>
+                    <th>Дата</th>
+                    <th>Время</th>
+                </tr>
+            </thead>
+            <tbody>
+                </tbody>
+        </table>
+        <button onclick="clearBookings()" style="margin-top:10px; background:#333; color:white; border:none; padding:5px 10px; cursor:pointer;">Очистить список записей</button>
+    </div>
+
+    <div class="navbar-top">
+        <a href="index.html" class="logo-text">Wonder</a>
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <div style="display: flex; gap: 15px; font-family: 'Montserrat', sans-serif; font-size: 13.5px; color: #e0e0e0; flex-wrap: wrap;">
+                <span style="display: flex; align-items: center; gap: 6px;">
+                    <svg style="width: 16px; height: 16px; color: #ffb6c1; flex-shrink: 0;" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                    </svg>
+                    г. Нижний Ломов, ул. Колбасенко, 1
+                </span>
+                <span style="display: flex; align-items: center; gap: 6px;">
+                    <svg style="width: 16px; height: 16px; color: #ffb6c1; flex-shrink: 0;" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                    </svg>
+                    +7 (999) 000-00-00
+                </span>
+            </div>
+            <button onclick="openModal()" style="background: #b0184a; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; flex-shrink: 0;">
+                Записаться
+            </button>
+        </div>
+    </div>
+
+    <nav>
+        <a href="index.html">Главная</a>
+        <a href="masters.html">Мастера</a>
+        <a href="services.html">Прайс-лист</a>
+        <a href="articles.html">Полезные статьи</a> 
+        <a href="reviews.html">Отзывы</a>
+        <a href="contacts.html">Контакты</a>
+    </nav>
+
+    <header class="hero">
+        <h1>Добро пожаловать в салон красоты "Wonder"</h1>
+        <p>Профессиональный уход и стиль в Нижнем Ломове</p>
+        <button onclick="openModal()" class="btn-dark" style="margin-top: 20px; padding: 15px 40px; font-size: 18px;">
+            Записаться онлайн
+        </button>
+    </header>
+
+    <div class="main-wrapper">
+        <aside class="sidebar">
+            <div class="promo-card">
+                <span class="promo-badge">Акция дня!</span>
+                <h3>Стрижка + Уход</h3>
+                <p>Скидка 20% при записи к Марианне</p>
+                <div style="font-weight: bold; color: #b0184a; margin-top: 10px;">от 800 ₽</div>
+            </div>
+
+            <div class="promo-card" style="background: #fdf5e6;">
+                <span class="promo-badge">New</span>
+                <h3>Кино-эффект</h3>
+                <p>Фотосессия в стиле Polaroid после окрашивания</p>
+            </div>
+       </aside>
+
+        <main class="content-area">
+            <h2 style="border-left: 5px solid #b0184a; padding-left: 15px; margin-top: 0;">
+                <span id="textAboutTitle">О салоне "Wonder"</span>
+                <button class="edit-btn" onclick="editContent('textAboutTitle')">[Редактировать]</button>
+            </h2>
+            <p style="line-height: 1.6;">
+                <span id="textAboutDesc">Салон красоты "Wonder" — это место, где традиции классического ухода встречаются с современными трендами колористики и стиля. Работаем ежедневно с 10:00 до 18:00 по адресу: г. Нижний Ломов, ул.Колбасенко, д.1</span>
+                <button class="edit-btn" onclick="editContent('textAboutDesc')">[Редактировать]</button>
+            </p>
+            
+            <div style="display: flex; gap: 20px; margin-top: 25px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 250px;">
+                    <h3 style="color: #b0184a;">Наши преимущества</h3>
+                    <ul style="padding-left: 20px; line-height: 1.8;">
+                        <li>Высокое качество обслуживания</li>
+                        <li>Только сертифицированные специалисты</li>
+                        <li>Профессиональные средства</li>
+                        <li>Атмосфера «Beauty-релакса»</li>
+                        <li>Гарантия на сложные окрашивания</li>
+                    </ul>
+                </div>
+                <div style="flex: 1; min-width: 250px;">
+                    <img src="interer.jpg" alt="Интерьер" style="width: 100%; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                </div>
+            </div>
+        </main>
+    </div> 
+
+<section class="faq-section">
+        <h2 class="faq-title">Часто задаваемые вопросы</h2>
+        <div class="faq-container">
+            
+            <div class="faq-item">
+                <button class="faq-question">
+                    Можно ли прийти на стрижку без предварительной записи?
+                    <span class="faq-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Мы работаем преимущественно по предварительной записи, чтобы гарантировать вам отсутствие очередей. Однако, если у мастера будет свободное окно между клиентами, мы с радостью примем вас сразу!</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    За сколько дней нужно записываться на сложное окрашивание?
+                    <span class="faq-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <p>На сложные техники окрашивания (Airtouch, шатуш, балаяж) мы рекомендуем записываться за 3–7 дней. Процедура занимает от 3 до 5 часов, поэтому мастеру необходимо выделить под вас фиксированное время.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    Какую косметику и красители вы используете в работе?
+                    <span class="faq-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Наш салон работает исключительно с сертифицированными профессиональными брендами премиум-сегмента. Все составы гипоаллергенны и содержат защитные компоненты для сохранения здоровья ваших волос.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    Можно ли отменить или перенести запись?
+                    <span class="faq-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Да, конечно. Если ваши планы изменились, пожалуйста, сообщите нам об этом минимум за 24 часа до визита. Вы можете перенести запись по телефону или через повторную онлайн-форму.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    Есть ли у вас гарантия на выполненные услуги?
+                    <span class="faq-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Мы полностью уверены в качестве работы наших специалистов, поэтому предоставляем недельную гарантию на сложные окрашивания и уходовые процедуры. Если возникнут вопросы — мы всегда рады помочь!</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="consultation-section">
+        <h2>Для консультации оставьте заявку:</h2>
+        <form class="consultation-form" onsubmit="return submitFormConsultation(event)">
+            <input type="text" placeholder="Ваше имя" required>
+            <input type="tel" placeholder="Номер телефона" required>
+            <button type="submit" class="btn-dark">Отправить заявку</button>
+        </form>
+    </section>
+
+    <footer>
+        <div class="footer-container">
+            <p>© 2026 Салон красоты "Wonder". Все права защищены.</p>
+            <p>г. Нижний Ломов, ул. Колбасенко, д. 1 | Тел: +7 (999) 000-00-00</p>
+            <p style="margin-top: 15px;"><a href="#" onclick="loginAdmin(event)" style="color: #ffb6c1; font-size: 11px; text-decoration: underline;">Вход для персонала (Администратор)</a></p>
+        </div>
+    </footer>
+
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 style="font-family: 'Marck Script', cursive; color: #b0184a; text-align: center;">Записаться</h2>
+            <form id="bookingForm" onsubmit="return submitForm(event)">
+                <label>Мастер:</label>
+                <select id="bookMaster" style="width:100%; padding: 10px; margin: 10px 0;" required>
+                    <option value="Ангелина (Колорист)">Ангелина (Колорист)</option>
+                    <option value="Софья (Стрижки)">Софья (Стрижки)</option>
+                    <option value="Марианна (Уходовые процеуры)">Марианна (Уходовые процеуры)</option>
+                    <option value="Варвара (Прически)">Варвара (Прически)</option>
+                    <option value="Роман (Барбер)">Роман (Барбер)</option>
+                </select>
+                
+                <input type="text" id="bookService" placeholder="Услуга" style="width:100%; padding:10px; margin:10px 0; box-sizing:border-box;" required>
+                
+                <label>Время:</label>
+                <select id="bookingTime" required>
+                    <option value="" disabled selected>Выберите время</option>
+                    <option value="10:00">10:00</option>
+                    <option value="11:00">11:00</option>
+                    <option value="12:00">12:00</option>
+                    <option value="13:00">13:00</option>
+                    <option value="14:00">14:00</option>
+                    <option value="15:00">15:00</option>
+                    <option value="16:00">16:00</option>
+                    <option value="17:00">17:00</option>
+                    <option value="18:00">18:00</option>
+                </select>
+                
+                <input type="date" id="bookDate" style="width:100%; padding:10px; margin:10px 0; box-sizing:border-box;" required>
+                <input type="text" id="bookName" placeholder="Ваше имя" style="width:100%; padding:10px; margin:10px 0; box-sizing:border-box;" required>
+                <input type="text" id="bookNumber" placeholder="Ваш номер телефона" style="width:100%; padding:10px; margin:10px 0; box-sizing:border-box;" required>
+                <button type="submit" class="btn-dark" style="width: 100%; background: #b0184a;">Записаться</button>
+            </form>
+        </div>
+    </div>
+
+    <button id="scrollToTopBtn" title="Наверх">▲</button>
+
+   <script>
+        // --- ГЕНЕРАЦИЯ ОБНОВЛЕННЫХ ГЛАМУРНЫХ ЗВЕЗД-БЛЕСТОК ---
+        function createSparkle() {
+            const sparkle = document.createElement('div');
+            sparkle.classList.add('sparkle');
+            
+            // Эстетичные четырехконечные звездочки
+            const starTypes = ['✦', '✧', '✦'];
+            sparkle.innerText = starTypes[Math.floor(Math.random() * starTypes.length)];
+            // Гламурный размер от 12px до 24px
+            const size = Math.random() * 12 + 12;
+            sparkle.style.fontSize = `${size}px`;
+            
+            // Палитра: платиновый белый, нежно-золотой, пастельно-розовый
+            const colors = ['#ffffff', '#fff3cd', '#ffe4e1', '#ffffff'];
+            sparkle.style.color = colors[Math.floor(Math.random() * colors.length)];
+            
+            // Позиция появления по всему экрану
+            sparkle.style.left = `${Math.random() * 100}vw`;
+            sparkle.style.top = `${Math.random() * 100}vh`;
+            
+            // Плавное время жизни от 3 до 6 секунд
+            const duration = Math.random() * 3 + 3;
+            sparkle.style.animationDuration = `${duration}s`;
+            
+            document.body.appendChild(sparkle);
+            
+            // Чистим за собой код
+            setTimeout(() => {
+                sparkle.remove();
+            }, duration * 1000);
+        }
+
+        // Создаем красивую звездочку каждые 400 миллисекунд
+        setInterval(createSparkle, 400);
+
+        function openModal() {
+            document.getElementById("bookingModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("bookingModal").style.display = "none";
+            document.getElementById("bookingForm").reset();
+        }
+
+        // КЛИЕНТ ОТПРАВЛЯЕТ ФОРМУ ЗАПИСИ
+        function submitForm(event) {
+            if (event) event.preventDefault();
+            var form = document.getElementById("bookingForm");
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return false;
+            }
+
+            // Собираем то, что ввел клиент
+            var newBooking = {
+                name: document.getElementById("bookName").value,
+                master: document.getElementById("bookMaster").value,
+                service: document.getElementById("bookService").value,
+                date: document.getElementById("bookDate").value,
+                time: document.getElementById("bookingTime").value
+            };
+            // Достаем старые записи из памяти браузера или создаем пустой массив
+            var currentBookings = JSON.parse(localStorage.getItem('salonBookings')) || [];
+            // Добавляем новую запись к старым
+            currentBookings.push(newBooking);
+            // Загружаем обновленный список обратно в память
+            localStorage.setItem('salonBookings', JSON.stringify(currentBookings));
+            alert("Рады, что вы выбрали нас! Мы вам перезвоним!");
+            form.reset();
+            closeModal();
+            // Если админка открыта, сразу обновим таблицу
+            updateAdminTable();
+            return false;
+        }
+
+        // Форма простой консультации
+        function submitFormConsultation(event) {
+            if (event) event.preventDefault();
+            alert("Заявка на консультацию отправлена! Мы свяжемся с вами в течение 10 минут.");
+            event.target.reset();
+            return false;
+        }
+
+        window.onclick = function(event) {
+            var modal = document.getElementById("bookingModal");
+            if (event.target == modal) closeModal();
+        }
+
+        // Кнопка наверх
+        window.addEventListener('scroll', function() {
+            var topBtn = document.getElementById("scrollToTopBtn");
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                topBtn.classList.add("show");
+            } else {
+                topBtn.classList.remove("show");
+            }
+        });
+        document.getElementById("scrollToTopBtn").addEventListener("click", function() {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+        
+        /* --- ЛОГИКА ДЛЯ РОЛИ АДМИНИСТРАТОРА (БЕЗ СЕРВЕРА) --- */
+
+        // Вход в админку
+        function loginAdmin(event) {
+            event.preventDefault();
+            var password = prompt("Введите пароль для входа в панель администратора:");
+            if (password === "1234") {
+                localStorage.setItem('isAdmin', 'true');
+                showAdminInterface();
+            } else if (password !== null) {
+                alert("Неверный пароль! Доступ закрыт.");
+            }
+        }
+
+        // Выход из админки
+        function logoutAdmin() {
+            localStorage.removeItem('isAdmin');
+            location.reload(); // Перезагружаем страницу, чтобы сбросить интерфейс до обычного клиента
+        }
+
+        // Показать скрытые элементы админа
+        function showAdminInterface() {
+            document.getElementById("adminPanel").style.display = "block";
+            // Показываем кнопки редактирования текстов
+            var editButtons = document.querySelectorAll('.edit-btn');
+            editButtons.forEach(function(btn) {
+                btn.style.display = "inline-block";
+            });
+            updateAdminTable();
+        }
+
+        // Обновить таблицу записей данными из localStorage
+        function updateAdminTable() {
+            var tbody = document.querySelector("#bookingsTable tbody");
+            tbody.innerHTML = ""; // Очищаем старые строки
+            
+            var bookings = JSON.parse(localStorage.getItem('salonBookings')) || [];
+            
+            if (bookings.length === 0) {
+                tbody.innerHTML = "<tr><td colspan='5' style='text-align:center; color: gray;'>Новых записей пока нет</td></tr>";
+                return;
+            }
+            
+            bookings.forEach(function(item) {
+                var row = document.createElement("tr");
+                row.innerHTML = "<td>" + item.name + "</td>" +
+                                "<td>" + item.master + "</td>" +
+                                "<td>" + item.service + "</td>" +
+                                "<td>" + item.date + "</td>" +
+                                "<td>" + item.time + "</td>";
+                tbody.appendChild(row);
+            });
+        }
+
+        // Очистить все записи
+        function clearBookings() {
+            if (confirm("Вы уверены, что хотите удалить все записи клиентов?")) {
+                localStorage.removeItem('salonBookings');
+                updateAdminTable();
+            }
+        }
+
+        // ИМИТАЦИЯ РЕДАКТИРОВАНИЯ ТЕКСТА НА САЙТЕ
+        function editContent(elementId) {
+            var element = document.getElementById(elementId);
+            var currentText = element.innerText;
+            var newText = prompt("Редактирование блока. Введите новый текст:", currentText);
+            if (newText !== null && newText.trim() !== "") {
+                element.innerText = newText;
+                // Сохраняем измененный текст в память, чтобы он не пропадал при обновлении страницы
+                localStorage.setItem(elementId, newText);
+            }
+        }
+
+        // При загрузке страницы проверяем: вдруг админ уже вошел, или есть измененные тексты?
+        window.onload = function() {
+            if (localStorage.getItem('isAdmin') === 'true') {
+                showAdminInterface();
+            }
+            
+            // Восстанавливаем отредактированные тексты, если они есть в памяти
+            if (localStorage.getItem('textAboutTitle')) {
+                document.getElementById('textAboutTitle').innerText = localStorage.getItem('textAboutTitle');
+            }
+            if (localStorage.getItem('textAboutDesc')) {
+                document.getElementById('textAboutDesc').innerText = localStorage.getItem('textAboutDesc');
+            }
+        }
+
+        // ЛОГИКА РАБОТЫ FAQ (АККОРДЕОН)
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const faqItem = button.parentElement;
+                const answer = button.nextElementSibling;
+
+                // Если этот пункт уже открыт — закрываем его
+                if (faqItem.classList.contains('active')) {
+                    faqItem.classList.remove('active');
+                    answer.style.maxHeight = null;
+                } else {
+                    // Закрываем другие открытые вопросы (опционально, для эффекта одиночного раскрытия)
+                    document.querySelectorAll('.faq-item').forEach(item => {
+                        item.classList.remove('active');
+                        item.querySelector('.faq-answer').style.maxHeight = null;
+                    });
+
+                    // Открываем текущий вопрос
+                    faqItem.classList.add('active');
+                    answer.style.maxHeight = answer.scrollHeight + "px";
+                }
+            });
+        });
+
+        // Автоматическое выделение активного пункта меню
+window.addEventListener('DOMContentLoaded', function() {
+    // Получаем имя текущего файла из адреса (например, "masters.html")
+    const currentFile = window.location.pathname.split("/").pop();
+    
+    // Находим все ссылки внутри навигации
+    const navLinks = document.querySelectorAll('nav a');
+    
+    navLinks.forEach(function(link) {
+        // Получаем значение атрибута href у ссылки
+        const linkHref = link.getAttribute('href');
+        
+        // Если имя файла совпадает с href ссылки, добавляем класс active
+        if (currentFile === linkHref) {
+            link.classList.add('active');
+        }
+        
+        // На случай, если сайт открыт просто по корневому адресу (главная)
+        if (currentFile === "" && linkHref === "index.html") {
+            link.classList.add('active');
+        }
+    });
+});
+    </script>
+</body>
+</html>

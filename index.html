@@ -7,11 +7,15 @@
     <link rel="icon" href="logo.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        html, body {
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             background-color: #fcb5d3;
             font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            padding: 0;
             color: #333;
         }
 
@@ -50,15 +54,14 @@
             display: inline-block;
         }
 
-        nav a:hover {
+        nav a:hover, nav a.active {
             transform: scale(1.1);
             color: #ffb6c1;
         }
-nav a.active {
-            color: #ffb6c1 !important;      /* Розовый цвет текста */
-            font-weight: bold;               /* Жирный шрифт */
-            border-bottom: 2px solid #b0184a; /* Элегантное бордовое подчеркивание */
-            padding-bottom: 5px;
+
+        nav a.active {
+            border-bottom: 2px solid #b0184a;
+            padding-bottom: 3px;
         }
 
         /* Шапка */
@@ -119,6 +122,7 @@ nav a.active {
             padding: 60px 20px;
             text-align: center;
             width: 100%;
+            box-sizing: border-box;
         }
 
         .consultation-form {
@@ -196,7 +200,7 @@ nav a.active {
             margin: 0 auto;
         }
 
-        /* СТИЛИ КНОПКИ НАВЕРХ */
+        /* Кнопка наверх */
         #scrollToTopBtn {
             position: fixed;
             bottom: 30px;
@@ -233,9 +237,9 @@ nav a.active {
             transform: scale(1.1);
         }
 
-        /* СТИЛИ ДЛЯ СЕКРЕТНОЙ ПАНЕЛИ АДМИНИСТРАТОРА */
+        /* Панель администратора */
         .admin-panel {
-            display: none; /* Скрыта по умолчанию */
+            display: none;
             background: #23272a;
             color: white;
             padding: 20px;
@@ -255,7 +259,6 @@ nav a.active {
         }
         .admin-panel th { background: #eee; }
         
-        /* Кнопки быстрого редактирования контента (видны только админу) */
         .edit-btn {
             display: none;
             background: #b0184a;
@@ -269,70 +272,47 @@ nav a.active {
             vertical-align: middle;
         }
 
-        /* --- МОБИЛЬНАЯ ВЁРСТКА ДЛЯ IPHONE И ДРУГИХ СМАРТФОНОВ --- */
-        @media (max-width: 768px) {
-            .navbar-top { flex-direction: column !important; gap: 10px !important; padding: 15px !important; text-align: center !important; }
-            .navbar-top div { flex-direction: column !important; gap: 10px !important; width: 100% !important; justify-content: center !important; }
-            nav { padding: 10px !important; }
-            nav a { margin: 5px 10px !important; font-size: 12px !important; }
-            .hero { padding: 30px 15px !important; }
-            .hero h1 { font-size: 24px !important; }
-            .hero p { font-size: 14px !important; }
-            .main-wrapper { flex-direction: column !important; gap: 20px !important; padding: 0 15px !important; margin: 20px auto !important; }
-            .sidebar { flex: none !important; width: 100% !important; }
-            .content-area { width: 100% !important; box-sizing: border-box !important; padding: 20px !important; }
-            .content-area div[style*="display: flex"] { flex-direction: column !important; gap: 15px !important; }
-            .consultation-form { width: 100% !important; max-width: 100% !important; padding: 0 15px !important; box-sizing: border-box !important; }
-            #scrollToTopBtn { width: 45px !important; height: 45px !important; min-width: 45px !important; bottom: 20px !important; right: 20px !important; }
+        /* Блестки */
+        .sparkle {
+            position: fixed;
+            font-family: serif;
+            line-height: 1;
+            pointer-events: none;
+            z-index: 0;
+            animation: glamFloat linear infinite;
+            opacity: 0;
+            text-shadow: 0 0 5px #ffffff, 0 0 10px #ffb6c1, 0 0 20px #fff;
         }
 
-        /* --- АНИМАЦИЯ БЛЕСТОК НА ФОНЕ --- */
-        /* --- НОВЫЕ ГЛАМУРНЫЕ БЛЕСТКИ С НЕОНОВЫМ СВЕЧЕНИЕМ --- */
-.sparkle {
-    position: fixed;
-    font-family: serif;
-    line-height: 1;
-    pointer-events: none;
-    z-index: 0;
-    animation: glamFloat linear infinite;
-    opacity: 0;
-    text-shadow: 0 0 5px #ffffff, 0 0 10px #ffb6c1, 0 0 20px #fff;
-}
+        @keyframes glamFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(20px) rotate(0deg) scale(0.6);
+            }
+            15% { opacity: 0.9; }
+            85% { opacity: 0.9; }
+            100% {
+                opacity: 0;
+                transform: translateY(-80px) rotate(180deg) scale(1.3);
+            }
+        }
 
-@keyframes glamFloat {
-    0% {
-        opacity: 0;
-        transform: translateY(20px) rotate(0deg) scale(0.6);
-    }
-    15% {
-        opacity: 0.9;
-    }
-    85% {
-        opacity: 0.9;
-    }
-    100% {
-        opacity: 0;
-        transform: translateY(-80px) rotate(180deg) scale(1.3);
-    }
-}
+        .navbar-top, nav, .hero, .about-section, .features, .faq-section, footer, .modal-overlay {
+            position: relative;
+            z-index: 1;
+        }
 
-/* Обязательно добавь z-index главным блокам, чтобы блёстки летали НАД фоном, но ЗА текстом */
-.navbar-top, nav, .hero, .about-section, .features, .faq-section, footer, .modal-overlay {
-    position: relative;
-    z-index: 1;
-}
-
-        /* Чтобы контент гарантированно был поверх блесток */
         .main-wrapper, header, footer, .consultation-section, .master-card, table, .admin-panel {
             position: relative;
             z-index: 1;
         }
         
-        /* --- СЕКЦИЯ FAQ (АККОРДЕОН) --- */
+        /* Секция FAQ */
         .faq-section {
             max-width: 1200px;
             margin: 40px auto;
             padding: 0 20px;
+            box-sizing: border-box;
         }
 
         .faq-title {
@@ -384,9 +364,7 @@ nav a.active {
             font-family: 'Montserrat', sans-serif;
         }
 
-        .faq-question:hover {
-            color: #b0184a;
-        }
+        .faq-question:hover { color: #b0184a; }
 
         .faq-answer {
             max-height: 0;
@@ -403,7 +381,6 @@ nav a.active {
             margin-top: 0;
         }
 
-        /* Поворот стрелочки при раскрытии */
         .faq-icon {
             transition: transform 0.3s;
             color: #b0184a;
@@ -412,6 +389,32 @@ nav a.active {
 
         .faq-item.active .faq-icon {
             transform: rotate(180deg);
+        }
+
+        /* --- МОБИЛЬНАЯ ВЁРСТКА --- */
+        @media (max-width: 768px) {
+            .navbar-top { flex-direction: column !important; gap: 10px !important; padding: 15px !important; text-align: center !important; }
+            .navbar-top div { flex-direction: column !important; gap: 10px !important; width: 100% !important; justify-content: center !important; }
+            nav { padding: 10px !important; }
+            nav a { margin: 5px 10px !important; font-size: 12px !important; }
+            .hero { padding: 30px 15px !important; }
+            .hero h1 { font-size: 24px !important; }
+            .hero p { font-size: 14px !important; }
+            .main-wrapper { flex-direction: column !important; gap: 20px !important; padding: 0 15px !important; margin: 20px auto !important; }
+            .sidebar { flex: none !important; width: 100% !important; }
+            .content-area { width: 100% !important; box-sizing: border-box !important; padding: 20px !important; }
+            .content-area div[style*="display: flex"] { flex-direction: column !important; gap: 15px !important; }
+            .consultation-form { width: 100% !important; max-width: 100% !important; padding: 0 15px !important; box-sizing: border-box !important; }
+            #scrollToTopBtn { width: 45px !important; height: 45px !important; min-width: 45px !important; bottom: 20px !important; right: 20px !important; }
+            
+            /* Фикс длинного вылезающего текста в подвале на iPhone */
+            footer p {
+                font-size: 12px !important;
+                line-height: 1.5 !important;
+                padding: 0 10px !important;
+                margin: 5px 0 !important;
+                word-wrap: break-word !important;
+            }
         }
     </style>
 </head>
@@ -435,7 +438,7 @@ nav a.active {
                 </tr>
             </thead>
             <tbody>
-                </tbody>
+            </tbody>
         </table>
         <button onclick="clearBookings()" style="margin-top:10px; background:#333; color:white; border:none; padding:5px 10px; cursor:pointer;">Очистить список записей</button>
     </div>
@@ -464,12 +467,11 @@ nav a.active {
     </div>
 
     <nav>
-        <a href="index.html">Главная</a>
+        <a href="index.html" class="active">Главная</a>
         <a href="masters.html">Мастера</a>
         <a href="services.html">Прайс-лист</a>
         <a href="articles.html">Полезные статьи</a> 
         <a href="reviews.html">Отзывы</a>
-        <a href="contacts.html">Контакты</a>
     </nav>
 
     <header class="hero">
@@ -524,7 +526,7 @@ nav a.active {
         </main>
     </div> 
 
-<section class="faq-section">
+    <section class="faq-section">
         <h2 class="faq-title">Часто задаваемые вопросы</h2>
         <div class="faq-container">
             
@@ -592,7 +594,7 @@ nav a.active {
 
     <footer>
         <div class="footer-container">
-            <p>© 2026 Салон красоты "Wonder". Все права защищены.</p>
+            <p>&copy; 2026 Салон красоты "Wonder". Все права защищены.</p>
             <p>г. Нижний Ломов, ул. Колбасенко, д. 1 | Тел: +7 (999) 000-00-00</p>
             <p style="margin-top: 15px;"><a href="#" onclick="loginAdmin(event)" style="color: #ffb6c1; font-size: 11px; text-decoration: underline;">Вход для персонала (Администратор)</a></p>
         </div>
@@ -604,7 +606,7 @@ nav a.active {
             <h2 style="font-family: 'Marck Script', cursive; color: #b0184a; text-align: center;">Записаться</h2>
             <form id="bookingForm" onsubmit="return submitForm(event)">
                 <label>Мастер:</label>
-                <select id="bookMaster" style="width:100%; padding: 10px; margin: 10px 0;" required>
+                <select id="bookMaster" style="width:100%; padding:10px; margin:10px 0; box-sizing:border-box; border:1px solid #ccc; border-radius:4px;" required>
                     <option value="Ангелина (Колорист)">Ангелина (Колорист)</option>
                     <option value="Софья (Стрижки)">Софья (Стрижки)</option>
                     <option value="Марианна (Уходовые процеуры)">Марианна (Уходовые процеуры)</option>
@@ -612,10 +614,10 @@ nav a.active {
                     <option value="Роман (Барбер)">Роман (Барбер)</option>
                 </select>
                 
-                <input type="text" id="bookService" placeholder="Услуга" style="width:100%; padding:10px; margin:10px 0; box-sizing:border-box;" required>
+                <input type="text" id="bookService" placeholder="Услуга" style="width:100%; padding:10px; margin:10px 0; box-sizing:border-box; border:1px solid #ccc; border-radius:4px;" required>
                 
                 <label>Время:</label>
-                <select id="bookingTime" required>
+                <select id="bookingTime" style="width:100%; padding:10px; margin:10px 0; box-sizing:border-box; border:1px solid #ccc; border-radius:4px;" required>
                     <option value="" disabled selected>Выберите время</option>
                     <option value="10:00">10:00</option>
                     <option value="11:00">11:00</option>
@@ -628,9 +630,9 @@ nav a.active {
                     <option value="18:00">18:00</option>
                 </select>
                 
-                <input type="date" id="bookDate" style="width:100%; padding:10px; margin:10px 0; box-sizing:border-box;" required>
-                <input type="text" id="bookName" placeholder="Ваше имя" style="width:100%; padding:10px; margin:10px 0; box-sizing:border-box;" required>
-                <input type="text" id="bookNumber" placeholder="Ваш номер телефона" style="width:100%; padding:10px; margin:10px 0; box-sizing:border-box;" required>
+                <input type="date" id="bookDate" style="width:100%; padding:10px; margin:10px 0; box-sizing:border-box; border:1px solid #ccc; border-radius:4px;" required>
+                <input type="text" id="bookName" placeholder="Ваше имя" style="width:100%; padding:10px; margin:10px 0; box-sizing:border-box; border:1px solid #ccc; border-radius:4px;" required>
+                <input type="text" id="bookNumber" placeholder="Ваш номер телефона" style="width:100%; padding:10px; margin:10px 0; box-sizing:border-box; border:1px solid #ccc; border-radius:4px;" required>
                 <button type="submit" class="btn-dark" style="width: 100%; background: #b0184a;">Записаться</button>
             </form>
         </div>
@@ -639,39 +641,32 @@ nav a.active {
     <button id="scrollToTopBtn" title="Наверх">▲</button>
 
    <script>
-        // --- ГЕНЕРАЦИЯ ОБНОВЛЕННЫХ ГЛАМУРНЫХ ЗВЕЗД-БЛЕСТОК ---
+        // Блестки
         function createSparkle() {
             const sparkle = document.createElement('div');
             sparkle.classList.add('sparkle');
             
-            // Эстетичные четырехконечные звездочки
             const starTypes = ['✦', '✧', '✦'];
             sparkle.innerText = starTypes[Math.floor(Math.random() * starTypes.length)];
-            // Гламурный размер от 12px до 24px
             const size = Math.random() * 12 + 12;
             sparkle.style.fontSize = `${size}px`;
             
-            // Палитра: платиновый белый, нежно-золотой, пастельно-розовый
             const colors = ['#ffffff', '#fff3cd', '#ffe4e1', '#ffffff'];
             sparkle.style.color = colors[Math.floor(Math.random() * colors.length)];
             
-            // Позиция появления по всему экрану
             sparkle.style.left = `${Math.random() * 100}vw`;
             sparkle.style.top = `${Math.random() * 100}vh`;
             
-            // Плавное время жизни от 3 до 6 секунд
             const duration = Math.random() * 3 + 3;
             sparkle.style.animationDuration = `${duration}s`;
             
             document.body.appendChild(sparkle);
             
-            // Чистим за собой код
             setTimeout(() => {
                 sparkle.remove();
             }, duration * 1000);
         }
 
-        // Создаем красивую звездочку каждые 400 миллисекунд
         setInterval(createSparkle, 400);
 
         function openModal() {
@@ -683,7 +678,6 @@ nav a.active {
             document.getElementById("bookingForm").reset();
         }
 
-        // КЛИЕНТ ОТПРАВЛЯЕТ ФОРМУ ЗАПИСИ
         function submitForm(event) {
             if (event) event.preventDefault();
             var form = document.getElementById("bookingForm");
@@ -692,7 +686,6 @@ nav a.active {
                 return false;
             }
 
-            // Собираем то, что ввел клиент
             var newBooking = {
                 name: document.getElementById("bookName").value,
                 master: document.getElementById("bookMaster").value,
@@ -700,21 +693,16 @@ nav a.active {
                 date: document.getElementById("bookDate").value,
                 time: document.getElementById("bookingTime").value
             };
-            // Достаем старые записи из памяти браузера или создаем пустой массив
             var currentBookings = JSON.parse(localStorage.getItem('salonBookings')) || [];
-            // Добавляем новую запись к старым
             currentBookings.push(newBooking);
-            // Загружаем обновленный список обратно в память
             localStorage.setItem('salonBookings', JSON.stringify(currentBookings));
             alert("Рады, что вы выбрали нас! Мы вам перезвоним!");
             form.reset();
             closeModal();
-            // Если админка открыта, сразу обновим таблицу
             updateAdminTable();
             return false;
         }
 
-        // Форма простой консультации
         function submitFormConsultation(event) {
             if (event) event.preventDefault();
             alert("Заявка на консультацию отправлена! Мы свяжемся с вами в течение 10 минут.");
@@ -740,9 +728,7 @@ nav a.active {
             window.scrollTo({ top: 0, behavior: "smooth" });
         });
         
-        /* --- ЛОГИКА ДЛЯ РОЛИ АДМИНИСТРАТОРА (БЕЗ СЕРВЕРА) --- */
-
-        // Вход в админку
+        /* Логика админа */
         function loginAdmin(event) {
             event.preventDefault();
             var password = prompt("Введите пароль для входа в панель администратора:");
@@ -754,16 +740,13 @@ nav a.active {
             }
         }
 
-        // Выход из админки
         function logoutAdmin() {
             localStorage.removeItem('isAdmin');
-            location.reload(); // Перезагружаем страницу, чтобы сбросить интерфейс до обычного клиента
+            location.reload();
         }
 
-        // Показать скрытые элементы админа
         function showAdminInterface() {
             document.getElementById("adminPanel").style.display = "block";
-            // Показываем кнопки редактирования текстов
             var editButtons = document.querySelectorAll('.edit-btn');
             editButtons.forEach(function(btn) {
                 btn.style.display = "inline-block";
@@ -771,10 +754,9 @@ nav a.active {
             updateAdminTable();
         }
 
-        // Обновить таблицу записей данными из localStorage
         function updateAdminTable() {
             var tbody = document.querySelector("#bookingsTable tbody");
-            tbody.innerHTML = ""; // Очищаем старые строки
+            tbody.innerHTML = "";
             
             var bookings = JSON.parse(localStorage.getItem('salonBookings')) || [];
             
@@ -794,7 +776,6 @@ nav a.active {
             });
         }
 
-        // Очистить все записи
         function clearBookings() {
             if (confirm("Вы уверены, что хотите удалить все записи клиентов?")) {
                 localStorage.removeItem('salonBookings');
@@ -802,25 +783,21 @@ nav a.active {
             }
         }
 
-        // ИМИТАЦИЯ РЕДАКТИРОВАНИЯ ТЕКСТА НА САЙТЕ
         function editContent(elementId) {
             var element = document.getElementById(elementId);
             var currentText = element.innerText;
             var newText = prompt("Редактирование блока. Введите новый текст:", currentText);
             if (newText !== null && newText.trim() !== "") {
                 element.innerText = newText;
-                // Сохраняем измененный текст в память, чтобы он не пропадал при обновлении страницы
                 localStorage.setItem(elementId, newText);
             }
         }
 
-        // При загрузке страницы проверяем: вдруг админ уже вошел, или есть измененные тексты?
         window.onload = function() {
             if (localStorage.getItem('isAdmin') === 'true') {
                 showAdminInterface();
             }
             
-            // Восстанавливаем отредактированные тексты, если они есть в памяти
             if (localStorage.getItem('textAboutTitle')) {
                 document.getElementById('textAboutTitle').innerText = localStorage.getItem('textAboutTitle');
             }
@@ -829,53 +806,26 @@ nav a.active {
             }
         }
 
-        // ЛОГИКА РАБОТЫ FAQ (АККОРДЕОН)
+        // Аккордеон FAQ
         document.querySelectorAll('.faq-question').forEach(button => {
             button.addEventListener('click', () => {
                 const faqItem = button.parentElement;
                 const answer = button.nextElementSibling;
 
-                // Если этот пункт уже открыт — закрываем его
                 if (faqItem.classList.contains('active')) {
                     faqItem.classList.remove('active');
                     answer.style.maxHeight = null;
                 } else {
-                    // Закрываем другие открытые вопросы (опционально, для эффекта одиночного раскрытия)
                     document.querySelectorAll('.faq-item').forEach(item => {
                         item.classList.remove('active');
                         item.querySelector('.faq-answer').style.maxHeight = null;
                     });
 
-                    // Открываем текущий вопрос
                     faqItem.classList.add('active');
                     answer.style.maxHeight = answer.scrollHeight + "px";
                 }
             });
         });
-
-        // Автоматическое выделение активного пункта меню
-window.addEventListener('DOMContentLoaded', function() {
-    // Получаем имя текущего файла из адреса (например, "masters.html")
-    const currentFile = window.location.pathname.split("/").pop();
-    
-    // Находим все ссылки внутри навигации
-    const navLinks = document.querySelectorAll('nav a');
-    
-    navLinks.forEach(function(link) {
-        // Получаем значение атрибута href у ссылки
-        const linkHref = link.getAttribute('href');
-        
-        // Если имя файла совпадает с href ссылки, добавляем класс active
-        if (currentFile === linkHref) {
-            link.classList.add('active');
-        }
-        
-        // На случай, если сайт открыт просто по корневому адресу (главная)
-        if (currentFile === "" && linkHref === "index.html") {
-            link.classList.add('active');
-        }
-    });
-});
     </script>
 </body>
 </html>

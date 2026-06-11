@@ -148,7 +148,7 @@
     }
 
     .edit-btn, .fire-btn {
-      display: none; 
+      display: none;
     }
     body.admin-mode .edit-btn {
       display: inline-block;
@@ -204,10 +204,10 @@
 
     @media (min-width: 1001px) {
       .masters-grid {
-        grid-template-columns: repeat(6, 1fr); 
+        grid-template-columns: repeat(6, 1fr);
       }
       .master-card {
-        grid-column: span 2; 
+        grid-column: span 2;
       }
       .master-card:nth-child(4) {
         grid-column: 2 / span 2;
@@ -417,6 +417,63 @@
       border-radius: 16px;
     }
 
+    /* --- Стили для загрузки фото портфолио --- */
+    .admin-add-photo-btn {
+      display: none;
+      background: #2e7d32;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      margin-top: 10px;
+      width: 100%;
+      font-weight: bold;
+    }
+    body.admin-mode .admin-add-photo-btn {
+      display: block;
+    }
+    .portfolio-img-container {
+        position: relative;
+        display: inline-block;
+    }
+    .portfolio-img {
+      width: 115px;
+      height: 115px;
+      object-fit: cover;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .portfolio-img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    .delete-photo-btn {
+        display: none;
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: #b0184a;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        font-size: 14px;
+        cursor: pointer;
+        line-height: 24px;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        z-index: 10;
+    }
+    body.admin-mode .delete-photo-btn {
+        display: block;
+    }
+    /* -------------------------------------- */
+
     .reviews-modal-content {
       background: white;
       padding: 30px;
@@ -534,7 +591,7 @@
         grid-template-columns: repeat(2, 1fr);
       }
       .master-card {
-        grid-column: span 1 !important; 
+        grid-column: span 1 !important;
       }
     }
 
@@ -620,6 +677,44 @@
       85% { opacity: 0.8; }
       100% { opacity: 0; transform: translateY(-60px) rotate(180deg) scale(1.2); }
     }
+
+    /* Стили для модального окна онлайн-записи */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2500;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(4px);
+    }
+    .modal-content {
+      background-color: white;
+      padding: 25px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 450px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      position: relative;
+      animation: zoomIn 0.3s ease;
+    }
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      color: #aaa;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .close:hover {
+      color: #b0184a;
+    }
   </style>
 </head>
 <body>
@@ -694,7 +789,7 @@
             +7 (999) 000-00-00
           </span>
         </div>
-        <button style="background: #b0184a; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold;">Записаться</button>
+        <button onclick="openModal()" style="background: #b0184a; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold;">Записаться</button>
       </div>
     </div>
     <nav>
@@ -720,6 +815,7 @@
       <div class="specialization">Топ-стилист, колорист</div>
       <div class="experience"><span>⏱️</span> Стаж 5 лет</div>
       <div class="expertise-badge">Эксперт в сложных окрашиваниях</div>
+      
       <div class="description-text">
         <span id="desc_angelina">Люблю работать с оттенками, которые подчёркивают натуральную красоту. Делаю бережное осветление и бебилайтс.</span><button class="edit-btn" onclick="editMasterText('desc_angelina')">[✎]</button>
       </div>
@@ -732,13 +828,16 @@
       <button class="view-all-works-btn" onclick="togglePortfolio('angelina-work')">👁 Смотреть все работы</button>
       <button class="fire-btn" onclick="fireMaster('card_angelina')">Уволить</button>
       <div id="angelina-work" class="portfolio">
-        <p style="width:100%; text-align:center; color:#888; font-size:0.8rem;">✨ Здесь скоро появятся новые работы ✨</p>
+        <div class="portfolio-gallery" id="gallery_angelina" style="display:flex; flex-wrap:wrap; gap:10px; width:100%; justify-content:center;"></div>
+        <input type="file" id="file_angelina" accept="image/*" style="display:none" onchange="handlePhotoUpload(this, 'angelina')">
+        <button class="admin-add-photo-btn" onclick="document.getElementById('file_angelina').click()">➕ Загрузить фото работы</button>
       </div>
     </div>
 
     <div class="master-card" id="card_sofiya">
       <img src="sofiya.jpg" class="master-photo" alt="Софья">
       <div class="master-name"><span id="name_sofiya">Софья Романова</span><button class="edit-btn" onclick="editMasterText('name_sofiya')">[✎]</button></div>
+     
       <div class="master-job"><span id="job_sofiya">Мастер по стрижкам</span><button class="edit-btn" onclick="editMasterText('job_sofiya')">[✎]</button></div>
       <div class="rating">★ 4.8 · <span class="reviews-link" id="count_sofiya" onclick="openReviewsModal('sofiya', 'Софье Романовой')">27 оценок</span></div>
       <div class="specialization">Стилист-парикмахер</div>
@@ -756,20 +855,23 @@
       <button class="view-all-works-btn" onclick="togglePortfolio('sofiya-work')">👁 Смотреть все работы</button>
       <button class="fire-btn" onclick="fireMaster('card_sofiya')">Уволить</button>
       <div id="sofiya-work" class="portfolio">
-        <p style="width:100%; text-align:center; color:#888; font-size:0.8rem;">✨ Здесь скоро появятся новые работы ✨</p>
+        <div class="portfolio-gallery" id="gallery_sofiya" style="display:flex; flex-wrap:wrap; gap:10px; width:100%; justify-content:center;"></div>
+        <input type="file" id="file_sofiya" accept="image/*" style="display:none" onchange="handlePhotoUpload(this, 'sofiya')">
+        <button class="admin-add-photo-btn" onclick="document.getElementById('file_sofiya').click()">➕ Загрузить фото работы</button>
       </div>
     </div>
 
     <div class="master-card" id="card_marianna">
       <img src="marianna.jpg" class="master-photo" alt="Марианна">
       <div class="master-name"><span id="name_marianna">Марианна Орлова</span><button class="edit-btn" onclick="editMasterText('name_marianna')">[✎]</button></div>
+     
       <div class="master-job"><span id="job_marianna">Стилист-технолог</span><button class="edit-btn" onclick="editMasterText('job_marianna')">[✎]</button></div>
       <div class="rating">★ 4.9 · <span class="reviews-link" id="count_marianna" onclick="openReviewsModal('marianna', 'Марианне Орловой')">41 оценка</span></div>
       <div class="specialization">Кератин, ботокс, восстановление</div>
       <div class="experience"><span>⏱️</span> Стаж 6 лет</div>
       <div class="expertise-badge">Эксперт уходовых процедур</div>
       <div class="description-text">
-        <span id="desc_marianna">Возвращаю волосам жизнь после окрашиваний и стресса. Мои ритуалы — кератин, ламинирование и глубокое восстановление.</span><button class="edit-btn" onclick="editMasterText('desc_marianna')">[✎]</button>
+        <span id="desc_marianna">Возвращаю волосам жизнь. Мои ритуалы — кератин, ламинирование и глубокое восстановление.</span><button class="edit-btn" onclick="editMasterText('desc_marianna')">[✎]</button>
       </div>
       <div class="before-after-gallery">
         <div class="ba-pair">
@@ -780,13 +882,16 @@
       <button class="view-all-works-btn" onclick="togglePortfolio('marianna-work')">👁 Смотреть все работы</button>
       <button class="fire-btn" onclick="fireMaster('card_marianna')">Уволить</button>
       <div id="marianna-work" class="portfolio">
-        <p style="width:100%; text-align:center; color:#888; font-size:0.8rem;">✨ Здесь скоро появятся новые работы ✨</p>
+        <div class="portfolio-gallery" id="gallery_marianna" style="display:flex; flex-wrap:wrap; gap:10px; width:100%; justify-content:center;"></div>
+        <input type="file" id="file_marianna" accept="image/*" style="display:none" onchange="handlePhotoUpload(this, 'marianna')">
+        <button class="admin-add-photo-btn" onclick="document.getElementById('file_marianna').click()">➕ Загрузить фото работы</button>
       </div>
     </div>
 
     <div class="master-card" id="card_varvara">
       <img src="varvara.jpg" class="master-photo" alt="Варвара">
       <div class="master-name"><span id="name_varvara">Варвара Савельева</span><button class="edit-btn" onclick="editMasterText('name_varvara')">[✎]</button></div>
+     
       <div class="master-job"><span id="job_varvara">Стилист</span><button class="edit-btn" onclick="editMasterText('job_varvara')">[✎]</button></div>
       <div class="rating">★ 4.8 · <span class="reviews-link" id="count_varvara" onclick="openReviewsModal('varvara', 'Варваре Савельевой')">19 оценок</span></div>
       <div class="specialization">Укладки и прически</div>
@@ -804,13 +909,16 @@
       <button class="view-all-works-btn" onclick="togglePortfolio('varvara-work')">👁 Смотреть все работы</button>
       <button class="fire-btn" onclick="fireMaster('card_varvara')">Уволить</button>
       <div id="varvara-work" class="portfolio">
-        <p style="width:100%; text-align:center; color:#888; font-size:0.8rem;">✨ Здесь скоро появятся новые работы ✨</p>
+        <div class="portfolio-gallery" id="gallery_varvara" style="display:flex; flex-wrap:wrap; gap:10px; width:100%; justify-content:center;"></div>
+        <input type="file" id="file_varvara" accept="image/*" style="display:none" onchange="handlePhotoUpload(this, 'varvara')">
+        <button class="admin-add-photo-btn" onclick="document.getElementById('file_varvara').click()">➕ Загрузить фото работы</button>
       </div>
     </div>
 
     <div class="master-card" id="card_roman">
       <img src="roman.jpg" class="master-photo" alt="Роман">
       <div class="master-name"><span id="name_roman">Роман Леонов</span><button class="edit-btn" onclick="editMasterText('name_roman')">[✎]</button></div>
+     
       <div class="master-job"><span id="job_roman">Барбер</span><button class="edit-btn" onclick="editMasterText('job_roman')">[✎]</button></div>
       <div class="rating">★ 4.9 · <span class="reviews-link" id="count_roman" onclick="openReviewsModal('roman', 'Роману Леоновову')">52 оценки</span></div>
       <div class="specialization">Мужские стрижки, бороды</div>
@@ -828,7 +936,9 @@
       <button class="view-all-works-btn" onclick="togglePortfolio('roman-work')">👁 Смотреть все работы</button>
       <button class="fire-btn" onclick="fireMaster('card_roman')">Уволить</button>
       <div id="roman-work" class="portfolio">
-        <p style="width:100%; text-align:center; color:#888; font-size:0.8rem;">✨ Здесь скоро появятся новые работы ✨</p>
+        <div class="portfolio-gallery" id="gallery_roman" style="display:flex; flex-wrap:wrap; gap:10px; width:100%; justify-content:center;"></div>
+        <input type="file" id="file_roman" accept="image/*" style="display:none" onchange="handlePhotoUpload(this, 'roman')">
+        <button class="admin-add-photo-btn" onclick="document.getElementById('file_roman').click()">➕ Загрузить фото работы</button>
       </div>
     </div>
   </div>
@@ -854,8 +964,7 @@
       <h3 id="reviewsTitle" style="margin-bottom: 5px; color: #b0184a; font-family: 'Montserrat', sans-serif; font-weight: 700;">Отзывы</h3>
       <p style="font-size: 0.8rem; color: #888; margin-bottom: 15px; font-style: italic;">Показаны последние добавленные отзывы</p>
       
-      <div id="reviewsContainer">
-        </div>
+      <div id="reviewsContainer"></div>
 
       <div class="add-review-section">
         <h4>Оставить свой отзыв</h4>
@@ -873,6 +982,56 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div id="bookingModal" class="modal">
+      <div class="modal-content">
+          <span class="close" onclick="closeModal()">&times;</span>
+          <h2 style="font-family: 'Marck Script', cursive; color: #b0184a; text-align: center; margin-bottom: 15px;">Записаться</h2>
+          <form id="bookingForm" style="display: flex; flex-direction: column; gap: 12px;">
+          <div>
+              <label style="font-size: 12px; color: #666; font-weight: bold; display: block; margin-bottom: 4px; text-align: left;">Мастер:</label>
+              <select id="bookMaster" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin: 0; font-family: inherit; font-size: 14px;" required>
+                  <option value="Любой свободный мастер">Любой свободный мастер</option>
+                  <option value="Ангелина (Колорист)">Ангелина (Колорист)</option>
+                  <option value="Софья (Стрижки)">Софья (Стрижки)</option>
+                  <option value="Марианна (Уходы)">Марианна (Уходовые процедуры)</option>
+                  <option value="Роман (Барбер)">Роман (Барбер)</option>
+              </select>
+          </div>
+          <div>
+              <label style="font-size: 12px; color: #666; font-weight: bold; display: block; margin-bottom: 4px; text-align: left;">Услуга:</label>
+              <input type="text" id="bookService" placeholder="Например: Сложное окрашивание" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin: 0; font-family: inherit; font-size: 14px;" required>
+          </div>
+          <div style="display: flex; gap: 10px;">
+              <div style="flex: 1;">
+                  <label style="font-size: 12px; color: #666; font-weight: bold; display: block; margin-bottom: 4px; text-align: left;">Дата:</label>
+                  <input type="date" id="bookDate" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin: 0; font-family: inherit; font-size: 14px;" required>
+              </div>
+              <div style="flex: 1;">
+                  <label style="font-size: 12px; color: #666; font-weight: bold; display: block; margin-bottom: 4px; text-align: left;">Время:</label>
+                  <select id="bookingTime" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin: 0; font-family: inherit; font-size: 14px;" required>
+                      <option value="" disabled selected>Время</option>
+                      <option value="10:00">10:00</option>
+                      <option value="11:00">11:00</option>
+                      <option value="12:00">12:00</option>
+                      <option value="14:00">14:00</option>
+                      <option value="16:00">16:00</option>
+                      <option value="17:00">17:00</option>
+                  </select>
+              </div>
+          </div>
+          <div>
+              <label style="font-size: 12px; color: #666; font-weight: bold; display: block; margin-bottom: 4px; text-align: left;">Ваше Имя и Фамилия:</label>
+              <input type="text" id="bookName" placeholder="Иван Иванов" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin: 0; font-family: inherit; font-size: 14px;" required>
+          </div>
+          <div>
+              <label style="font-size: 12px; color: #666; font-weight: bold; display: block; margin-bottom: 4px; text-align: left;">Телефон:</label>
+              <input type="tel" id="bookNumber" placeholder="+7 (999) 000-00-00" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin: 0; font-family: inherit; font-size: 14px;" required>
+          </div>
+          <button type="submit" style="background: #b0184a; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 8px; width: 100%; font-family: 'Montserrat', sans-serif; font-size: 15px; box-shadow: 0 4px 10px rgba(176, 24, 74, 0.2);">Отправить заявку</button>
+      </form>
+      </div>
   </div>
 
   <script>
@@ -909,7 +1068,7 @@
         topBtn.classList.remove("show");
       }
     });
-
+    
     document.getElementById("scrollToTopBtn").addEventListener("click", function() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
@@ -925,9 +1084,72 @@
       document.getElementById("photoModal").style.display = "none";
     }
 
-    // --- ДАННЫЕ И ЛОГИКА ОТЗЫВОВ ---
-    let currentMasterForReview = ''; 
+    // --- ЛОГИКА ЗАГРУЗКИ ФОТО ПОРТФОЛИО ---
+    function handlePhotoUpload(input, masterId) {
+      const file = input.files[0];
+      if (!file) return;
 
+      const reader = new FileReader();
+      reader.onload = function(e) {
+          const base64Image = e.target.result;
+          savePhotoToLocal(masterId, base64Image);
+          renderPortfolioPhotos(masterId);
+      };
+      reader.readAsDataURL(file);
+      input.value = ''; // сброс инпута
+    }
+
+    function savePhotoToLocal(masterId, base64Image) {
+      let photos = JSON.parse(localStorage.getItem('portfolio_' + masterId) || '[]');
+      photos.push(base64Image);
+      try {
+          localStorage.setItem('portfolio_' + masterId, JSON.stringify(photos));
+      } catch (e) {
+          alert("Ой! Превышен лимит памяти браузера (localStorage). Изображение слишком тяжелое или накопилось слишком много фото. Попробуйте сжать картинку.");
+      }
+    }
+
+    function deletePortfolioPhoto(masterId, index) {
+      if(!confirm("Вы уверены, что хотите удалить эту фотографию из портфолио?")) return;
+      let photos = JSON.parse(localStorage.getItem('portfolio_' + masterId) || '[]');
+      photos.splice(index, 1);
+      localStorage.setItem('portfolio_' + masterId, JSON.stringify(photos));
+      renderPortfolioPhotos(masterId);
+    }
+
+    function renderPortfolioPhotos(masterId) {
+      const gallery = document.getElementById('gallery_' + masterId);
+      if (!gallery) return;
+
+      let photos = JSON.parse(localStorage.getItem('portfolio_' + masterId) || '[]');
+      gallery.innerHTML = '';
+
+      if (photos.length === 0) {
+          gallery.innerHTML = '<p style="width:100%; text-align:center; color:#888; font-size:0.8rem;" class="empty-msg">✨ Здесь скоро появятся новые работы ✨</p>';
+          return;
+      }
+
+      photos.forEach((src, index) => {
+          const imgContainer = document.createElement('div');
+          imgContainer.className = 'portfolio-img-container';
+          imgContainer.innerHTML = `
+              <img src="${src}" class="portfolio-img" onclick="openPhotoModal('${src}')">
+              <button class="delete-photo-btn" onclick="deletePortfolioPhoto('${masterId}', ${index})" title="Удалить фото">×</button>
+          `;
+          gallery.appendChild(imgContainer);
+      });
+    }
+
+    function initAllGalleries() {
+      const staticIds = ['angelina', 'sofiya', 'marianna', 'varvara', 'roman'];
+      staticIds.forEach(id => renderPortfolioPhotos(id));
+      
+      let customMasters = JSON.parse(localStorage.getItem('custom_masters') || '[]');
+      customMasters.forEach(m => renderPortfolioPhotos(m.id));
+    }
+
+    // --- ДАННЫЕ И ЛОГИКА ОТЗЫВОВ ---
+    let currentMasterForReview = '';
     const baseReviewCounts = {
       angelina: 67,
       sofiya: 27,
@@ -935,7 +1157,6 @@
       varvara: 19,
       roman: 52
     };
-
     const initialReviews = {
       angelina: [
         { author: "Екатерина В.", stars: "★★★★★", text: "Ангелина — просто волшебница колористики! Сложный аиртач получился идеальным." },
@@ -992,7 +1213,6 @@
       currentMasterForReview = masterKey;
       const modal = document.getElementById("reviewsModal");
       const title = document.getElementById("reviewsTitle");
-      
       title.innerText = `Отзывы о мастере: ${masterName}`;
       renderReviewsList();
       
@@ -1002,7 +1222,6 @@
     function renderReviewsList() {
       const container = document.getElementById("reviewsContainer");
       container.innerHTML = "";
-      
       const reviews = allReviews[currentMasterForReview] || [];
       
       [...reviews].reverse().forEach(rev => {
@@ -1036,7 +1255,6 @@
       }
 
       const newReview = { author: name, stars: stars, text: text };
-      
       if (!allReviews[currentMasterForReview]) {
         allReviews[currentMasterForReview] = [];
       }
@@ -1077,7 +1295,6 @@
     function showAdminInterface() {
       document.body.classList.add('admin-mode');
       document.getElementById("adminPanel").style.display = "block";
-      
       getAllMasterIds().forEach(id => {
         if (localStorage.getItem(id + '_fired') === 'true') {
           const btn = document.querySelector(`#${id} .fire-btn`);
@@ -1096,7 +1313,6 @@
 
     function saveNewMaster(e) {
       e.preventDefault();
-      
       const newMaster = {
         id: "card_custom_" + Date.now(),
         name: document.getElementById("new_name").value,
@@ -1144,11 +1360,14 @@
           <button class="view-all-works-btn" onclick="togglePortfolio('${m.id}-work')">👁 Смотреть все работы</button>
           <button class="fire-btn" onclick="fireMaster('${m.id}')">Уволить</button>
           <div id="${m.id}-work" class="portfolio">
-            <p style="width:100%; text-align:center; color:#888; font-size:0.8rem;">✨ Здесь скоро появятся новые работы ✨</p>
+            <div class="portfolio-gallery" id="gallery_${m.id}" style="display:flex; flex-wrap:wrap; gap:10px; width:100%; justify-content:center;"></div>
+            <input type="file" id="file_${m.id}" accept="image/*" style="display:none" onchange="handlePhotoUpload(this, '${m.id}')">
+            <button class="admin-add-photo-btn" onclick="document.getElementById('file_${m.id}').click()">➕ Загрузить фото работы</button>
           </div>
         </div>
       `;
       grid.insertAdjacentHTML('beforeend', cardHtml);
+      renderPortfolioPhotos(m.id); // Сразу рендерим пустую галерею или фото для нового мастера
     }
 
     function editMasterText(id) {
@@ -1197,6 +1416,34 @@
       
       // Обновляем счетчики еще раз после загрузки кастомных мастеров
       updateReviewCounts();
+
+      // Инициализируем галереи портфолио
+      initAllGalleries();
+    }
+
+    // Функции для работы модального окна онлайн-записи
+    function openModal() {
+      document.getElementById("bookingModal").style.display = "flex";
+    }
+
+    document.getElementById("bookingModal").addEventListener("click", function(event) {
+      if (event.target === this) {
+        closeModal();
+      }
+    });
+
+    function closeModal() {
+      document.getElementById("bookingModal").style.display = "none";
+    }
+
+    function submitBooking(event) {
+      event.preventDefault();
+      const name = document.getElementById("bookName").value;
+      const master = document.getElementById("bookMaster").value;
+      alert(`Спасибо за заявку, ${name}! Вы успешно записались к мастеру: ${master}. Мы свяжемся с вами в ближайшее время.`);
+      closeModal();
+      document.getElementById("bookingForm").reset();
+      return false;
     }
   </script>
 </body>

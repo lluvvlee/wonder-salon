@@ -167,10 +167,6 @@
     .book-btn { background: #b0184a; color: white; border: none; padding: 18px 40px; border-radius: 12px; font-size: 16px; font-weight: 700; font-family: 'Montserrat', sans-serif; cursor: pointer; box-shadow: 0 8px 20px rgba(176, 24, 74, 0.3); transition: all 0.3s; }
     .book-btn:hover { background: #2c2f33; transform: translateY(-2px); box-shadow: 0 10px 25px rgba(44, 47, 51, 0.3); }
 
-    /* ================= ПОДВАЛ ================= */
-    footer { background: #2c2f33; color: white; padding: 40px 20px; width: 100%; margin-top: 60px; text-align: center; position: relative; z-index: 5; }
-    .footer-container { max-width: 1200px; margin: 0 auto; line-height: 1.8; }
-
     /* ================= МОДАЛЬНОЕ ОКНО ================= */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -181,8 +177,8 @@
     .modal-overlay.active { opacity: 1; visibility: visible; }
     .modal-content {
       background: #fff; padding: 40px; border-radius: 20px;
-      width: 90%; max-width: 400px; position: relative;
-      transform: translateY(-20px); transition: transform 0.3s ease;
+      width: 90%; max-width: 440px; position: relative;
+      transform: translateY(-20px); transition: zoomIn;
       box-shadow: 0 15px 40px rgba(0,0,0,0.2);
     }
     .modal-overlay.active .modal-content { transform: translateY(0); }
@@ -191,13 +187,10 @@
       color: #888; cursor: pointer; transition: 0.2s;
     }
     .close-modal:hover { color: #b0184a; }
-    .modal-content h2 { color: #2c2f33; margin-bottom: 20px; text-align: center; }
-    .modal-input {
-      width: 100%; padding: 15px; margin-bottom: 15px;
-      border: 1px solid #ddd; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-size: 14px;
-    }
-    .modal-input:focus { outline: none; border-color: #b0184a; }
-    .modal-submit { width: 100%; padding: 15px; }
+    
+    /* ПОДВАЛ */
+    footer { background: #2c2f33; color: white; padding: 40px 20px; width: 100%; margin-top: 60px; text-align: center; position: relative; z-index: 5; }
+    .footer-container { max-width: 1200px; margin: 0 auto; line-height: 1.8; }
 
     @media (max-width: 768px) {
       .pricing-grid { grid-template-columns: 1fr; }
@@ -232,7 +225,7 @@
                     +7 (999) 000-00-00
                 </span>
             </div>
-            <button onclick="openModal()" style="background: #b0184a; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; flex-shrink: 0;">
+            <button onclick="openModal()" class="open-modal-btn" style="background: #b0184a; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; flex-shrink: 0;">
                 Записаться
             </button>
         </div>
@@ -278,12 +271,50 @@
   <div class="modal-overlay" id="bookingModal">
     <div class="modal-content">
       <span class="close-modal" id="closeModalBtn">&times;</span>
-      <h2>Ждем вас в Wonder!</h2>
-      <p style="text-align: center; color: #666; font-size: 13px; margin-bottom: 20px;">Оставьте свои данные, и администратор перезвонит вам для консультации.</p>
-      <form id="bookingForm">
-        <input type="text" class="modal-input" placeholder="Ваше Имя и Фамилия" required>
-        <input type="tel" class="modal-input" placeholder="Ваш номер телефона (+7...)" required>
-        <button type="submit" class="book-btn modal-submit">Перезвоните мне</button>
+      <h2 style="font-family: 'Marck Script', cursive; color: #b0184a; text-align: center; margin-bottom: 15px; font-size: 32px;">Записаться</h2>
+      
+      <form id="bookingForm" style="display: flex; flex-direction: column; gap: 12px;">
+          <div>
+              <label style="font-size: 12px; color: #666; font-weight: bold; display: block; margin-bottom: 4px; text-align: left;">Мастер:</label>
+              <select id="bookMaster" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin: 0; font-family: inherit; font-size: 14px;" required>
+                  <option value="Любой свободный мастер">Любой свободный мастер</option>
+                  <option value="Ангелина (Колорист)">Ангелина (Колорист)</option>
+                  <option value="Софья (Стрижки)">Софья (Стрижки)</option>
+                  <option value="Марианна (Уходы)">Марианна (Уходовые процедуры)</option>
+                  <option value="Роман (Барбер)">Роман (Барбер)</option>
+              </select>
+          </div>
+          <div>
+              <label style="font-size: 12px; color: #666; font-weight: bold; display: block; margin-bottom: 4px; text-align: left;">Услуга:</label>
+              <input type="text" id="bookService" placeholder="Например: Сложное окрашивание" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin: 0; font-family: inherit; font-size: 14px;" required>
+          </div>
+          <div style="display: flex; gap: 10px;">
+              <div style="flex: 1;">
+                  <label style="font-size: 12px; color: #666; font-weight: bold; display: block; margin-bottom: 4px; text-align: left;">Дата:</label>
+                  <input type="date" id="bookDate" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin: 0; font-family: inherit; font-size: 14px;" required>
+              </div>
+              <div style="flex: 1;">
+                  <label style="font-size: 12px; color: #666; font-weight: bold; display: block; margin-bottom: 4px; text-align: left;">Время:</label>
+                  <select id="bookingTime" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin: 0; font-family: inherit; font-size: 14px;" required>
+                      <option value="" disabled selected>Время</option>
+                      <option value="10:00">10:00</option>
+                      <option value="11:00">11:00</option>
+                      <option value="12:00">12:00</option>
+                      <option value="14:00">14:00</option>
+                      <option value="16:00">16:00</option>
+                      <option value="17:00">17:00</option>
+                  </select>
+              </div>
+          </div>
+          <div>
+              <label style="font-size: 12px; color: #666; font-weight: bold; display: block; margin-bottom: 4px; text-align: left;">Ваше Имя и Фамилия:</label>
+              <input type="text" id="bookName" placeholder="Иван Иванов" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin: 0; font-family: inherit; font-size: 14px;" required>
+          </div>
+          <div>
+              <label style="font-size: 12px; color: #666; font-weight: bold; display: block; margin-bottom: 4px; text-align: left;">Телефон:</label>
+              <input type="tel" id="bookNumber" placeholder="+7 (999) 000-00-00" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin: 0; font-family: inherit; font-size: 14px;" required>
+          </div>
+          <button type="submit" style="background: #b0184a; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 8px; width: 100%; font-family: 'Montserrat', sans-serif; font-size: 15px; box-shadow: 0 4px 10px rgba(176, 24, 74, 0.2);">Отправить заявку</button>
       </form>
     </div>
   </div>
@@ -311,22 +342,31 @@
     const closeBtn = document.getElementById('closeModalBtn');
     const bookingForm = document.getElementById('bookingForm');
 
+    // Явные глобальные функции открытия/закрытия
+    function openModal() {
+      modal.classList.add('active');
+    }
+    
+    function closeModal() {
+      modal.classList.remove('active');
+    }
+
     openBtns.forEach(btn => {
-      btn.addEventListener('click', () => modal.classList.add('active'));
+      btn.addEventListener('click', openModal);
     });
 
-    closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+    closeBtn.addEventListener('click', closeModal);
     
     // Закрытие по клику вне окна
     modal.addEventListener('click', (e) => {
-      if (e.target === modal) modal.classList.remove('active');
+      if (e.target === modal) closeModal();
     });
 
     // Обработка отправки формы
     bookingForm.addEventListener('submit', (e) => {
       e.preventDefault();
       alert("Спасибо! Ваша заявка принята. Наш администратор перезвонит вам в ближайшее время.");
-      modal.classList.remove('active');
+      closeModal();
       bookingForm.reset();
     });
 
@@ -388,13 +428,15 @@
       }
     ];
 
+
+
+    
     function renderServices() {
       const container = document.getElementById('pricingGrid');
       container.innerHTML = '';
 
       let savedData = JSON.parse(localStorage.getItem('wonder_services'));
       
-      // Авто-очистка старых данных, если там остались старые эмодзи с ножницами
       if (savedData && savedData.length > 0 && savedData[0].title.includes('✂️')) {
         localStorage.removeItem('wonder_services');
         savedData = null;
@@ -439,7 +481,6 @@
           `;
         });
 
-        // Добавляем зеленую кнопку создания новой услуги в конец карточки
         cardHTML += `
               </ul>
             </div>
@@ -450,7 +491,6 @@
       });
     }
 
-    // ФУНКЦИЯ ДОБАВЛЕНИЯ НОВОЙ УСЛУГИ
     function addService(catIndex) {
       let savedData = JSON.parse(localStorage.getItem('wonder_services'));
       
@@ -463,26 +503,23 @@
       let price = prompt("Установите цену на услугу (например: 1500 ₽):");
       if (!price || price.trim() === "") return;
 
-      // Добавляем новый объект услуги в массив выбранной категории
       savedData[catIndex].services.push({
         name: name.trim(),
         desc: desc.trim(),
         price: price.trim(),
-        badge: "" // Изначально без плашек, при желании можно дописать
+        badge: ""
       });
 
-      // Перезаписываем базу в localStorage и обновляем экран
       localStorage.setItem('wonder_services', JSON.stringify(savedData));
       renderServices();
     }
 
-    // ФУНКЦИЯ УДАЛЕНИЯ УСЛУГИ
     function deleteService(catIndex, srvIndex) {
       let savedData = JSON.parse(localStorage.getItem('wonder_services'));
       let serviceName = savedData[catIndex].services[srvIndex].name;
       
       if (confirm(`Вы уверены, что хотите полностью удалить услугу "${serviceName}"?`)) {
-        savedData[catIndex].services.splice(srvIndex, 1); // Удаляем элемент из массива
+        savedData[catIndex].services.splice(srvIndex, 1);
         localStorage.setItem('wonder_services', JSON.stringify(savedData));
         renderServices();
       }
@@ -501,21 +538,20 @@
       service.name = newName.trim();
       service.price = newPrice.trim();
       localStorage.setItem('wonder_services', JSON.stringify(savedData));
-      
       renderServices();
     }
 
+
+
+    
     // 5. ПРОВЕРКИ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
     window.addEventListener('DOMContentLoaded', function() {
-      // 5.1 Отрисовываем прайс-лист
       renderServices();
       
-      // 5.2 Проверяем сессию админа
       if (localStorage.getItem('isAdmin') === 'true') {
         showAdminInterface();
       }
 
-      // 5.3 Автоматическое выделение активного пункта меню
       const currentFile = window.location.pathname.split("/").pop() || "index.html";
       const navLinks = document.querySelectorAll('nav a');
       

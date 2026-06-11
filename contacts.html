@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Контакты — Салон красоты "Wonder"</title>
+    <title>Салон красоты "Wonder" | Контакты</title>
     <link rel="icon" href="logo.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -498,46 +498,49 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <h2 style="font-family: 'Marck Script', cursive; color: #b0184a; text-align: center; margin-bottom: 15px;">Записаться</h2>
-            <form id="bookingForm" onsubmit="return submitBooking(event)" style="display: flex; flex-direction: column; gap: 12px;">
-                <div>
-                    <label style="font-size: 12px; color: #666; font-weight: bold;">Мастер:</label>
-                    <select id="bookMaster" style="width:100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;" required>
-                        <option value="Любой свободный мастер">Любой свободный мастер</option>
-                        <option value="Ангелина (Колорист)">Ангелина (Колорист)</option>
-                        <option value="Софья (Стрижки)">Софья (Стрижки)</option>
-                        <option value="Марианна (Уходы)">Марианна (Уходовые процедуры)</option>
-                        <option value="Роман (Барбер)">Роман (Барбер)</option>
-                    </select>
-                </div>
-                <div>
-                    <label style="font-size: 12px; color: #666; font-weight: bold;">Услуга:</label>
-                    <input type="text" id="bookService" placeholder="Например: Сложное окрашивание" style="width:100%; padding:10px; border: 1px solid #ccc; border-radius: 6px; box-sizing:border-box;" required>
-                </div>
-                <div style="display: flex; gap: 10px;">
-                    <div style="flex: 1;">
-                        <label style="font-size: 12px; color: #666; font-weight: bold;">Дата:</label>
-                        <input type="date" id="bookDate" style="width:100%; padding:10px; border: 1px solid #ccc; border-radius: 6px; box-sizing:border-box;" required>
-                    </div>
-                    <div style="flex: 1;">
-                        <label style="font-size: 12px; color: #666; font-weight: bold;">Время:</label>
-                        <select id="bookingTime" style="width:100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;" required>
-                            <option value="" disabled selected>Время</option>
-                            <option value="10:00">10:00</option>
-                            <option value="11:00">11:00</option>
-                            <option value="12:00">12:00</option>
-                            <option value="14:00">14:00</option>
-                            <option value="16:00">16:00</option>
-                        </select>
-                    </div>
-                </div>
-                <div>
-                    <input type="text" id="bookName" placeholder="Ваше имя" style="width:100%; padding:10px; border: 1px solid #ccc; border-radius: 6px; box-sizing:border-box;" required>
-                </div>
-                <div>
-                    <input type="text" id="bookNumber" placeholder="Ваш номер телефона" style="width:100%; padding:10px; border: 1px solid #ccc; border-radius: 6px; box-sizing:border-box;" required>
-                </div>
-                <button type="submit" style="background: #b0184a; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 5px;">Отправить заявку</button>
-            </form>
+            <form id="bookingForm" style="display: flex; flex-direction: column; gap: 12px;">
+          <div>
+              <label style="font-size: 12px; color: #666; font-weight: bold; display: block; margin-bottom: 4px; text-align: left;">Мастер:</label>
+              <select id="bookMaster" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin: 0; font-family: inherit; font-size: 14px;" required>
+                  <option value="Любой свободный мастер">Любой свободный мастер</option>
+                  <option value="Ангелина (Колорист)">Ангелина (Колорист)</option>
+                  <option value="Софья (Стрижки)">Софья (Стрижки)</option>
+                  <option value="Марианна (Уходы)">Марианна (Уходовые процедуры)</option>
+                  <option value="Роман (Барбер)">Роман (Барбер)</option>
+              </select>
+          </div>
+          <div>
+              <label style="font-size: 12px; color: #666; font-weight: bold; display: block; margin-bottom: 4px; text-align: left;">Услуга:</label>
+              <input type="text" id="bookService" placeholder="Например: Сложное окрашивание" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin: 0; font-family: inherit; font-size: 14px;" required>
+          </div>
+          <div style="display: flex; gap: 10px;">
+              <div style="flex: 1;">
+                  <label style="font-size: 12px; color: #666; font-weight: bold; display: block; margin-bottom: 4px; text-align: left;">Дата:</label>
+                  <input type="date" id="bookDate" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin: 0; font-family: inherit; font-size: 14px;" required>
+              </div>
+              <div style="flex: 1;">
+                  <label style="font-size: 12px; color: #666; font-weight: bold; display: block; margin-bottom: 4px; text-align: left;">Время:</label>
+                  <select id="bookingTime" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin: 0; font-family: inherit; font-size: 14px;" required>
+                      <option value="" disabled selected>Время</option>
+                      <option value="10:00">10:00</option>
+                      <option value="11:00">11:00</option>
+                      <option value="12:00">12:00</option>
+                      <option value="14:00">14:00</option>
+                      <option value="16:00">16:00</option>
+                      <option value="17:00">17:00</option>
+                  </select>
+              </div>
+          </div>
+          <div>
+              <label style="font-size: 12px; color: #666; font-weight: bold; display: block; margin-bottom: 4px; text-align: left;">Ваше Имя и Фамилия:</label>
+              <input type="text" id="bookName" placeholder="Иван Иванов" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin: 0; font-family: inherit; font-size: 14px;" required>
+          </div>
+          <div>
+              <label style="font-size: 12px; color: #666; font-weight: bold; display: block; margin-bottom: 4px; text-align: left;">Телефон:</label>
+              <input type="tel" id="bookNumber" placeholder="+7 (999) 000-00-00" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin: 0; font-family: inherit; font-size: 14px;" required>
+          </div>
+          <button type="submit" style="background: #b0184a; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 8px; width: 100%; font-family: 'Montserrat', sans-serif; font-size: 15px; box-shadow: 0 4px 10px rgba(176, 24, 74, 0.2);">Отправить заявку</button>
+      </form>
         </div>
     </div>
 

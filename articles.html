@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Полезные статьи — Салон красоты "Wonder"</title>
+    <title>Салон красоты "Wonder | Полезные статьи"</title>
     <link rel="icon" href="logo.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -54,7 +54,7 @@
             transform: scale(1.1);
             color: #ffb6c1;
         }
-nav a.active {
+        nav a.active {
             color: #ffb6c1 !important;      /* Розовый цвет текста */
             font-weight: bold;               /* Жирный шрифт */
             border-bottom: 2px solid #b0184a; /* Элегантное бордовое подчеркивание */
@@ -175,16 +175,22 @@ nav a.active {
             font-size: 22px;
             cursor: pointer;
             color: #aaa;
+            line-height: 1;
         }
 
-        .modal-window input, .modal-window select {
+        .close-btn:hover {
+            color: #b0184a;
+        }
+
+        /* Устаревшие стили полей закомментированы, чтобы не мешать инлайн-стилям новой формы */
+        /* .modal-window input, .modal-window select {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
-        }
+        } */
 
         .btn-submit {
             background: #b0184a;
@@ -418,21 +424,52 @@ nav a.active {
     </main>
 
     <div class="modal-overlay" id="modalOverlay">
-        <div class="modal-window">
+        <div class="modal-window" style="max-width: 440px; padding: 25px; border-radius: 20px;">
             <span class="close-btn" onclick="closeModal()">&times;</span>
-            <h3 style="font-family: 'Montserrat', sans-serif; margin-top: 0;">Онлайн-запись</h3>
-            <form id="bookingForm">
-                <input type="text" placeholder="Ваше имя" required>
-                <input type="tel" placeholder="Номер телефона" required>
-                <select required>
-                    <option value="" disabled selected>Выберите услугу</option>
-                    <option value="1">Женская стрижка</option>
-                    <option value="2">Мужская стрижка</option>
-                    <option value="3">Сложное окрашивание</option>
-                    <option value="4">Уходовая процедура</option>
-                </select>
-                <button type="submit" class="btn-submit">Подтвердить запись</button>
-            </form>
+            <h2 style="font-family: 'Marck Script', cursive; color: #b0184a; text-align: center; margin-top: 0; margin-bottom: 15px; font-size: 32px;">Записаться</h2>
+            <form id="bookingForm" style="display: flex; flex-direction: column; gap: 12px;">
+          <div>
+              <label style="font-size: 12px; color: #666; font-weight: bold; display: block; margin-bottom: 4px; text-align: left;">Мастер:</label>
+              <select id="bookMaster" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin: 0; font-family: inherit; font-size: 14px;" required>
+                  <option value="Любой свободный мастер">Любой свободный мастер</option>
+                  <option value="Ангелина (Колорист)">Ангелина (Колорист)</option>
+                  <option value="Софья (Стрижки)">Софья (Стрижки)</option>
+                  <option value="Марианна (Уходы)">Марианна (Уходовые процедуры)</option>
+                  <option value="Роман (Барбер)">Роман (Барбер)</option>
+              </select>
+          </div>
+          <div>
+              <label style="font-size: 12px; color: #666; font-weight: bold; display: block; margin-bottom: 4px; text-align: left;">Услуга:</label>
+              <input type="text" id="bookService" placeholder="Например: Сложное окрашивание" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin: 0; font-family: inherit; font-size: 14px;" required>
+          </div>
+          <div style="display: flex; gap: 10px;">
+              <div style="flex: 1;">
+                  <label style="font-size: 12px; color: #666; font-weight: bold; display: block; margin-bottom: 4px; text-align: left;">Дата:</label>
+                  <input type="date" id="bookDate" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin: 0; font-family: inherit; font-size: 14px;" required>
+              </div>
+              <div style="flex: 1;">
+                  <label style="font-size: 12px; color: #666; font-weight: bold; display: block; margin-bottom: 4px; text-align: left;">Время:</label>
+                  <select id="bookingTime" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin: 0; font-family: inherit; font-size: 14px;" required>
+                      <option value="" disabled selected>Время</option>
+                      <option value="10:00">10:00</option>
+                      <option value="11:00">11:00</option>
+                      <option value="12:00">12:00</option>
+                      <option value="14:00">14:00</option>
+                      <option value="16:00">16:00</option>
+                      <option value="17:00">17:00</option>
+                  </select>
+              </div>
+          </div>
+          <div>
+              <label style="font-size: 12px; color: #666; font-weight: bold; display: block; margin-bottom: 4px; text-align: left;">Ваше Имя и Фамилия:</label>
+              <input type="text" id="bookName" placeholder="Иван Иванов" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin: 0; font-family: inherit; font-size: 14px;" required>
+          </div>
+          <div>
+              <label style="font-size: 12px; color: #666; font-weight: bold; display: block; margin-bottom: 4px; text-align: left;">Телефон:</label>
+              <input type="tel" id="bookNumber" placeholder="+7 (999) 000-00-00" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin: 0; font-family: inherit; font-size: 14px;" required>
+          </div>
+          <button type="submit" style="background: #b0184a; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 8px; width: 100%; font-family: 'Montserrat', sans-serif; font-size: 15px; box-shadow: 0 4px 10px rgba(176, 24, 74, 0.2);">Отправить заявку</button>
+      </form>
         </div>
     </div>
 
@@ -486,11 +523,35 @@ nav a.active {
         document.getElementById('modalOverlay').addEventListener('click', function(e) {
             if (e.target === this) closeModal();
         });
-        document.getElementById('bookingForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Спасибо за заявку! Мы свяжемся с вами в ближайшее время.');
+        
+        // НОВАЯ ЛОГИКА ОТПРАВКИ ФОРМЫ (С СОХРАНЕНИЕМ ДЛЯ АДМИНКИ)
+        function submitBooking(event) {
+            if (event) event.preventDefault();
+            var form = document.getElementById("bookingForm");
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return false;
+            }
+
+            var newBooking = {
+                name: document.getElementById("bookName").value,
+                master: document.getElementById("bookMaster").value,
+                service: document.getElementById("bookService").value,
+                date: document.getElementById("bookDate").value,
+                time: document.getElementById("bookingTime").value
+            };
+            
+            var currentBookings = JSON.parse(localStorage.getItem('salonBookings')) || [];
+            currentBookings.push(newBooking);
+            localStorage.setItem('salonBookings', JSON.stringify(currentBookings));
+            
+            alert(`Спасибо за заявку, ${newBooking.name}! Вы успешно записались к мастеру: ${newBooking.master}. Мы свяжемся с вами в ближайшее время.`);
+            
+            form.reset();
             closeModal();
-        });
+            updateAdminTable();
+            return false;
+        }
 
         // ЛОГИКА МОДАЛЬНОГО ОКНА СТАТЕЙ
         function openArticle(title, content) {
@@ -591,28 +652,20 @@ nav a.active {
         });
 
         // Автоматическое выделение активного пункта меню
-window.addEventListener('DOMContentLoaded', function() {
-    // Получаем имя текущего файла из адреса (например, "masters.html")
-    const currentFile = window.location.pathname.split("/").pop();
-    
-    // Находим все ссылки внутри навигации
-    const navLinks = document.querySelectorAll('nav a');
-    
-    navLinks.forEach(function(link) {
-        // Получаем значение атрибута href у ссылки
-        const linkHref = link.getAttribute('href');
-        
-        // Если имя файла совпадает с href ссылки, добавляем класс active
-        if (currentFile === linkHref) {
-            link.classList.add('active');
-        }
-        
-        // На случай, если сайт открыт просто по корневому адресу (главная)
-        if (currentFile === "" && linkHref === "index.html") {
-            link.classList.add('active');
-        }
-    });
-});
+        window.addEventListener('DOMContentLoaded', function() {
+            const currentFile = window.location.pathname.split("/").pop();
+            const navLinks = document.querySelectorAll('nav a');
+            
+            navLinks.forEach(function(link) {
+                const linkHref = link.getAttribute('href');
+                if (currentFile === linkHref) {
+                    link.classList.add('active');
+                }
+                if (currentFile === "" && linkHref === "index.html") {
+                    link.classList.add('active');
+                }
+            });
+        });
     </script>
 </body>
 </html>
